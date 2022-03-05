@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.DumperOptions;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -45,6 +46,9 @@ public class CentralSystem {
     private String currentIdentifier;
     private UUID currentSessionIndex;
     
+    private Request receivedRequest;
+    private Confirmation receivedConfirmation;
+
     private boolean isStarted;
     private static boolean debug = true;
 
@@ -54,10 +58,10 @@ public class CentralSystem {
             @Override
             public AuthorizeConfirmation handleAuthorizeRequest(
                     UUID sessionIndex, AuthorizeRequest request) {
-                if(debug){
-                    System.out.println(request);
-                }
 
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
+                
                 AuthorizeConfirmation confirmation = new AuthorizeConfirmation();
                 IdTagInfo tagInfo = new IdTagInfo();
                 tagInfo.setStatus(AuthorizationStatus.Accepted);
@@ -84,9 +88,10 @@ public class CentralSystem {
             @Override
             public BootNotificationConfirmation handleBootNotificationRequest(
                     UUID sessionIndex, BootNotificationRequest request) {
-                if(debug){
-                    System.out.println(request);
-                }
+
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
+
                 BootNotificationConfirmation confirmation = new BootNotificationConfirmation();
                 try {
                     confirmation.setInterval(1);
@@ -101,9 +106,10 @@ public class CentralSystem {
             @Override
             public DataTransferConfirmation handleDataTransferRequest(
                     UUID sessionIndex, DataTransferRequest request) {
-                if(debug){
-                    System.out.println(request);
-                }
+
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
+
                 DataTransferConfirmation confirmation = new DataTransferConfirmation();
                 confirmation.setStatus(DataTransferStatus.Accepted);
                 return confirmation;
@@ -112,9 +118,9 @@ public class CentralSystem {
             @Override
             public HeartbeatConfirmation handleHeartbeatRequest(
                     UUID sessionIndex, HeartbeatRequest request) {
-                if(debug){
-                    System.out.println(request);
-                }
+
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
 
                 HeartbeatConfirmation confirmation = new HeartbeatConfirmation();
                 confirmation.setCurrentTime(ZonedDateTime.now());
@@ -124,19 +130,17 @@ public class CentralSystem {
             @Override
             public MeterValuesConfirmation handleMeterValuesRequest(
                     UUID sessionIndex, MeterValuesRequest request) {
-                if(debug){
-                    System.out.println(request);
-                }
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
+
                 return new MeterValuesConfirmation();
             }
 
             @Override
             public StartTransactionConfirmation handleStartTransactionRequest(
                     UUID sessionIndex, StartTransactionRequest request) {
-
-                if(debug){
-                    System.out.println(request);
-                }
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
 
                 // handle events
                 IdTagInfo tagInfo = new IdTagInfo();
@@ -151,9 +155,10 @@ public class CentralSystem {
             @Override
             public StatusNotificationConfirmation handleStatusNotificationRequest(
                     UUID sessionIndex, StatusNotificationRequest request) {
-                if(debug){
-                    System.out.println(request);
-                }
+
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
+
                 // handle events
                 StatusNotificationConfirmation confirmation = new StatusNotificationConfirmation();
                 return confirmation;
@@ -162,9 +167,8 @@ public class CentralSystem {
             @Override
             public StopTransactionConfirmation handleStopTransactionRequest(
                     UUID sessionIndex, StopTransactionRequest request) {
-                if(debug){
-                    System.out.println(request);
-                }
+                receivedRequest = request;
+                logger.info(String.valueOf(receivedRequest));
                 StopTransactionConfirmation confirmation = new StopTransactionConfirmation();
                 return confirmation;
             }
