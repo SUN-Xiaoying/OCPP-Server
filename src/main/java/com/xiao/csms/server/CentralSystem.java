@@ -75,13 +75,6 @@ public class CentralSystem {
                 } catch (ResourceNotFoundException e) {
                     System.err.println(e);
                 }
-
-                //Test changeAvailability
-                try {
-                    sendChangeAvailabilityRequest(1, AvailabilityType.Inoperative);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 return confirmation;
             }
 
@@ -174,6 +167,7 @@ public class CentralSystem {
             }
         };
     }
+
     public ServerEvents generateServerEventsHandler() {
         return new ServerEvents() {
             @Override
@@ -233,7 +227,7 @@ public class CentralSystem {
     public void clientLost(){ server.closeSession(currentSessionIndex);}
 
     public void start() throws Exception{
-        final String host = "127.0.0.1";
+        final String host="localhost";
         if(!isStarted){
             int port = 8887;
             server.open(host, port, new ServerEvents() {
@@ -400,4 +394,11 @@ public class CentralSystem {
         server.send(currentSessionIndex, request);
     }
 
+    public UUID getCurrentSessionIndex() {
+        return currentSessionIndex;
+    }
+
+    public void setCurrentSessionIndex(UUID currentSessionIndex) {
+        this.currentSessionIndex = currentSessionIndex;
+    }
 }

@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequestMapping("/api/clients")
 public class ClientService {
     @Autowired
     private ClientRepo repo;

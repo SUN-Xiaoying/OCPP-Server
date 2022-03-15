@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OCPP Server</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+<!-- Navbar -->
+<div th:insert="~{components/navbar :: navbar}"></div>
+
+<div th:if="${warning}" class="alert alert-danger test-center">
+    [[${warning}]]
+</div>
+
+<div th:if="${message}" class="alert alert-success test-center">
+    [[${message}]]
+</div>
+
+<div class="container py-5">
+    <h4>
+        Is server closed?: <b>[[${isClosed}]]</b>
+    </h4>
+    <h4>
+        Is client connected?: <b>[[${isConnected}]]</b>
+    </h4>
+    <div th:if="${currentSession}">
+        <h4><b>CurrentSession</b>: [[${currentSession}]]</h4>
+
+        <button class="btn btn-outline-warning d-block mx-auto">
+            <a th:href="@{'/changeAvailability'}">Change Availability</a>
+        </button>
+
+        <button class="btn btn-outline-primary d-block mx-auto mt-3">
+            <a th:href="@{'/clearCache'}">Clear Cache</a>
+        </button>
+
+        <button class="btn btn-outline-success d-block mx-auto mt-3">
+            <a th:href="@{'/remoteStartTransaction'}">Remote Start Transaction</a>
+        </button>
+
+    </div>
+</div>
+
+
+</body>
+<!-- Footer -->
+<div th:insert="~{components/footer :: footer}"></div>
+</html>
