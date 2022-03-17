@@ -227,7 +227,7 @@ public class CentralSystem {
     public void clientLost(){ server.closeSession(currentSessionIndex);}
 
     public void start() throws Exception{
-        final String host="localhost";
+        final String host="0.0.0.0";
         if(!isStarted){
             int port = 8887;
             server.open(host, port, new ServerEvents() {
