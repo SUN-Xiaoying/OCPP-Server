@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transactions</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+</head>
+<body>
+<!-- Navbar -->
+<div th:insert="~{components/navbar :: navbar}"></div>
+
+<!-- Back Arrow -->
+<div th:insert="~{components/back :: back}"></div>
+
+<div class="container py-5">
+    <h4>Transactions</h4>
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Connector Id</th>
+            <th>SoC</th>
+            <th>Transaction Id</th>
+            <th>Start Time</th>
+            <th>Stop Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="t: ${trans}">
+            <tr>
+                <td>[[${t.id}]]</td>
+                <td>[[${t.connectorId}]]</td>
+                <td>[[${t.soc}]]</td>
+                <td>[[${t.transactionId}]]</td>
+                <td>[[${t.startTime}]]</td>
+                <td>[[${t.stopTime}]]</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <button class="btn btn-success d-block mx-auto mt-4">
+        <a href="/cleanTransactions">Clean all transactions</a>
+    </button>
+</div>
+
+</body>
+</html>

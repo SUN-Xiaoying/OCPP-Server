@@ -57,7 +57,7 @@ public class DayPriceService{
         if(!repo.ifExist(date)){
             for(int i=0; i<MAX_HOUR; i++){
                 DayPrice dp = new DayPrice();
-                dp.setDate(todayDot);
+                dp.setDate(date);
                 dp.setHour(i+1);
                 dp.setPrice(result.get(i));
                 repo.save(dp);

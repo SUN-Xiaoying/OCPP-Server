@@ -1,24 +1,22 @@
-package com.xiao.csms.client;
+package com.xiao.csms.reservation;
 
-import com.xiao.csms.exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.time.ZonedDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="client")
-public class Client {
-
+@Table(name="reservation")
+public class Reservation {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
+    @Column(name = "reservationId")
+    int reservationId;
 
     @Column(name = "connectorId")
     int connectorId;
@@ -26,20 +24,21 @@ public class Client {
     @Column(name = "transactionId")
     int transactionId;
 
-    @Column(name = "timeStamp")
-    String timeStamp;
+    @Column(name = "start")
+    int start;
 
-    @Column(name = "reservationId")
-    int reservationId;
+    @Column(name = "stop")
+    int stop;
 
     @Column(name = "idTag")
     String idTag;
 
-    @Column(name = "meterStart")
-    int meterStart;
+    @Column(name = "expiryDate")
+    String expiryDate;
 
-    @Column(name = "meterStop")
-    int meterStop;
+    public int getId() {
+        return id;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -53,6 +52,14 @@ public class Client {
         this.connectorId = connectorId;
     }
 
+    public int getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
+    }
+
     public int getTransactionId() {
         return transactionId;
     }
@@ -61,20 +68,20 @@ public class Client {
         this.transactionId = transactionId;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public int getStart() {
+        return start;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setStart(int start) {
+        this.start = start;
     }
 
-    public int getReservationId() {
-        return reservationId;
+    public int getStop() {
+        return stop;
     }
 
-    public void setReservationId(int reservationId) {
-        this.reservationId = reservationId;
+    public void setStop(int stop) {
+        this.stop = stop;
     }
 
     public String getIdTag() {
@@ -85,29 +92,21 @@ public class Client {
         this.idTag = idTag;
     }
 
-    public int getMeterStart() {
-        return meterStart;
+    public String getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setMeterStart(int meterStart) {
-        this.meterStart = meterStart;
-    }
-
-    public int getMeterStop() {
-        return meterStop;
-    }
-
-    public void setMeterStop(int meterStop) {
-        this.meterStop = meterStop;
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     @Override
     public String toString(){
-        return "Client{\n"+
-                "id = " + id + "\n" +
+        return "Reservation{\n"+
+                "id = " + reservationId + "\n" +
                 "connector = " + connectorId + "\n" +
                 "transaction = " + transactionId + "\n" +
-                "timestamp = " + timeStamp + "\n" +
+                "expiryDate = " + expiryDate + "\n" +
                 "}";
     }
 }

@@ -1,6 +1,10 @@
 package com.xiao.csms.client;
 
 import com.xiao.csms.exceptions.ResourceNotFoundException;
+import eu.chargetime.ocpp.model.core.MeterValuesRequest;
+import eu.chargetime.ocpp.model.core.StartTransactionRequest;
+import eu.chargetime.ocpp.model.core.StatusNotificationRequest;
+import eu.chargetime.ocpp.model.core.StopTransactionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,54 +27,71 @@ public class ClientService {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    // get all clients
+    // GET all clients
     public List<Client> getAllClients(){
         return repo.findAll();
     }
 
-    // get client by idToken
-    public Client findByIdToken(String idToken) throws ResourceNotFoundException {
-        Optional<Client> result = repo.findByIdToken(idToken);
+    // GET a client by connectorId
+    public Client getByConnectorId(int connectorId){
+        Optional<Client> result = repo.findByConnectorId(connectorId);
         if(result.isPresent()){
             return result.get();
-        } throw new ResourceNotFoundException("Client not found by idToken " + idToken);
+        } throw new ResourceNotFoundException("Cannot find client by connectorId " + connectorId);
     }
 
-    // get client by id
-    public Client get(Integer id) throws ClientNotFoundException {
-        Optional<Client> result = repo.findById(id);
-        if(result.isPresent()){
-            return result.get();
-        } throw new ClientNotFoundException("Could not find connector by " + id);
+    // DELETE a client by Id
+    public void deleteClient(int id){
+        Client result = this.repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id));
+        repo.delete(result);
     }
 
-    // save client
-    public void save(String idToken) throws ResourceNotFoundException {
-        if(repo.ifExist(idToken)){
-            updateClient(idToken);
-        }else{
-            Client c = new Client();
-            c.setIdToken(idToken);
-            c.setLastTime(ZonedDateTime.now().format(formatter).toString());
-            repo.save(c);
+    // DELETE ALL
+    public void cleanAll(){ repo.cleanAll(); }
+
+//    // SAVE meterValues
+//    public void saveMeterValue(MeterValuesRequest reuqest){
+//        reuqest.
+//    }
+
+    // SAVE startTransactionRequest
+    public void saveStartTransaction(StartTransactionRequest request){
+        Client c = new Client();
+        c.setConnectorId(request.getConnectorId());
+        if(request.getReservationId() != null){
+            c.setReservationId(request.getReservationId());
         }
+
+        c.setIdTag(request.getIdTag());
+        c.setTimeStamp(String.valueOf(request.getTimestamp()));
+        c.setMeterStart(request.getMeterStart());
+        repo.save(c);
+
     }
 
-    // update client
-    @Transactional
-    public void updateClient(String idToken){
-        repo.findByIdToken(idToken).map(target ->{
-            target.setLastTime(ZonedDateTime.now().format(formatter).toString());
+    // SAVE stopTransactionRequest
+    public void saveStopTransaction(StopTransactionRequest reuqest){
+        repo.findByIdTag(reuqest.getIdTag()).map(target -> {
+            target.setTimeStamp(String.valueOf(reuqest.getTimestamp()));
+            target.setMeterStop(reuqest.getMeterStop());
+            target.setConnectorId(0);
+            target.setReservationId(0);
             repo.save(target);
             return target;
         });
     }
 
-    // delete client by id
-    public ResponseEntity<Client> deleteClient(int id){
-        Client result = this.repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id));
-        this.repo.delete(result);
-        return ResponseEntity.ok().build();
+    // SAVE stopTransactionRequest
+    public void saveStatusNotification(StatusNotificationRequest reuqest){
+        int cid = reuqest.getConnectorId();
+        if(repo.ifConnectorExists(cid)){
+            repo.findByConnectorId(cid).map(target ->{
+                target.setTimeStamp(String.valueOf(reuqest.getTimestamp()));
+                repo.save(target);
+                return target;
+            });
+        }
     }
+
 }

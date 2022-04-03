@@ -2,7 +2,11 @@ package com.xiao.csms.server;
 
 
 import com.xiao.csms.client.ClientService;
+import com.xiao.csms.connector.Connector;
+import com.xiao.csms.connector.ConnectorService;
 import com.xiao.csms.exceptions.ResourceNotFoundException;
+import com.xiao.csms.reservation.ReservationService;
+import com.xiao.csms.transaction.TransactionService;
 import eu.chargetime.ocpp.*;
 import eu.chargetime.ocpp.feature.profile.*;
 import eu.chargetime.ocpp.model.Confirmation;
@@ -18,21 +22,17 @@ import eu.chargetime.ocpp.model.remotetrigger.TriggerMessageRequestType;
 import eu.chargetime.ocpp.model.reservation.CancelReservationRequest;
 import eu.chargetime.ocpp.model.reservation.ReserveNowRequest;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.DumperOptions;
 
+import java.lang.reflect.Array;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.function.BiConsumer;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -41,16 +41,14 @@ public class CentralSystem {
 
     private IServerAPI server;
 
-    @Autowired public ClientService clientService;
+    @Autowired private ConnectorService connectorService;
+    @Autowired public TransactionService transactionService;
+    @Autowired private ReservationService reservationService;
 
     private String currentIdentifier;
     private UUID currentSessionIndex;
-    
-    private Request receivedRequest;
-    private Confirmation receivedConfirmation;
 
     private boolean isStarted;
-    private static boolean debug = true;
 
     public ServerCoreEventHandler createServerCoreEventHandler() {
 
@@ -59,8 +57,7 @@ public class CentralSystem {
             public AuthorizeConfirmation handleAuthorizeRequest(
                     UUID sessionIndex, AuthorizeRequest request) {
 
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
+                logger.info(String.valueOf(request));
                 
                 AuthorizeConfirmation confirmation = new AuthorizeConfirmation();
                 IdTagInfo tagInfo = new IdTagInfo();
@@ -69,12 +66,6 @@ public class CentralSystem {
                 tagInfo.setExpiryDate(calendar);
                 confirmation.setIdTagInfo(tagInfo);
 
-                // Check local Auth Cache
-                try {
-                    clientService.save(request.getIdTag());
-                } catch (ResourceNotFoundException e) {
-                    System.err.println(e);
-                }
                 return confirmation;
             }
 
@@ -82,8 +73,7 @@ public class CentralSystem {
             public BootNotificationConfirmation handleBootNotificationRequest(
                     UUID sessionIndex, BootNotificationRequest request) {
 
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
+                logger.info(String.valueOf(request));
 
                 BootNotificationConfirmation confirmation = new BootNotificationConfirmation();
                 try {
@@ -100,8 +90,7 @@ public class CentralSystem {
             public DataTransferConfirmation handleDataTransferRequest(
                     UUID sessionIndex, DataTransferRequest request) {
 
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
+                logger.info(String.valueOf(request));
 
                 DataTransferConfirmation confirmation = new DataTransferConfirmation();
                 confirmation.setStatus(DataTransferStatus.Accepted);
@@ -111,10 +100,6 @@ public class CentralSystem {
             @Override
             public HeartbeatConfirmation handleHeartbeatRequest(
                     UUID sessionIndex, HeartbeatRequest request) {
-
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
-
                 HeartbeatConfirmation confirmation = new HeartbeatConfirmation();
                 confirmation.setCurrentTime(ZonedDateTime.now());
                 return confirmation;
@@ -123,8 +108,14 @@ public class CentralSystem {
             @Override
             public MeterValuesConfirmation handleMeterValuesRequest(
                     UUID sessionIndex, MeterValuesRequest request) {
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
+                logger.info(String.valueOf(request));
+
+                // ToDo: Display SoC
+                MeterValue[] meterValues = request.getMeterValue();
+                if(meterValues.length > 0){
+                    SampledValue[] sampledValues = meterValues[0].getSampledValue();
+                    logger.info("SampledValue MeterValue " + Arrays.toString(sampledValues));
+                }
 
                 return new MeterValuesConfirmation();
             }
@@ -132,8 +123,7 @@ public class CentralSystem {
             @Override
             public StartTransactionConfirmation handleStartTransactionRequest(
                     UUID sessionIndex, StartTransactionRequest request) {
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
+                logger.info(String.valueOf(request));
 
                 // handle events
                 IdTagInfo tagInfo = new IdTagInfo();
@@ -141,7 +131,11 @@ public class CentralSystem {
 
                 StartTransactionConfirmation confirmation = new StartTransactionConfirmation();
                 confirmation.setIdTagInfo(tagInfo);
-                confirmation.setTransactionId(42);
+                // Random tansactionId
+                int tid = 10000 + (int)(Math.random()*10000);
+                confirmation.setTransactionId(tid);
+                // save to DB
+                transactionService.saveStartRequest(request, tid);
                 return confirmation;
             }
 
@@ -149,21 +143,42 @@ public class CentralSystem {
             public StatusNotificationConfirmation handleStatusNotificationRequest(
                     UUID sessionIndex, StatusNotificationRequest request) {
 
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
+                logger.info(String.valueOf(request));
+
+                // save connectorInfo to MySQL
+                Connector connector = new Connector();
+                connector.setConnectorId(request.getConnectorId());
+                connector.setErrorCode(String.valueOf(request.getErrorCode()));
+                connector.setStatus(String.valueOf(request.getStatus()));
+                connector.setTimeStamp(String.valueOf(request.getTimestamp()));
+                connectorService.save(connector);
 
                 // handle events
-                StatusNotificationConfirmation confirmation = new StatusNotificationConfirmation();
-                return confirmation;
+                return new StatusNotificationConfirmation();
             }
 
             @Override
             public StopTransactionConfirmation handleStopTransactionRequest(
                     UUID sessionIndex, StopTransactionRequest request) {
-                receivedRequest = request;
-                logger.info(String.valueOf(receivedRequest));
-                StopTransactionConfirmation confirmation = new StopTransactionConfirmation();
-                return confirmation;
+
+                logger.info(String.valueOf(request));
+
+//                try {
+//                    TimeUnit.SECONDS.sleep(10);
+//                    MeterValue[] transactionData = request.getTransactionData();
+//                    // ToDo: Display SoC
+//                    if(transactionData.length > 0){
+//                        SampledValue[] sampledValues = transactionData[0].getSampledValue();
+//                        logger.info("SampledValue STOP " + Arrays.toString(sampledValues));
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+
+
+                transactionService.stop(request);
+
+                return new StopTransactionConfirmation();
             }
         };
     }
@@ -183,7 +198,7 @@ public class CentralSystem {
             }
         };
     }
-    
+
     public CentralSystem(){
         ServerCoreProfile serverCoreProfile =
                 new ServerCoreProfile(createServerCoreEventHandler());
@@ -199,21 +214,6 @@ public class CentralSystem {
     private void initializeServer(){
         ServerSmartChargingProfile smartChargingProfile = new ServerSmartChargingProfile();
         server.addFeatureProfile(smartChargingProfile);
-
-//        ServerRemoteTriggerProfile remoteTriggerProfile = new ServerRemoteTriggerProfile();
-//        server.addFeatureProfile(remoteTriggerProfile);
-//
-//        ServerFirmwareManagementProfile firmwareManagementProfile =
-//                new ServerFirmwareManagementProfile(
-//                        serverHandlers.createServerFirmwareManagementEventHandler());
-//        server.addFeatureProfile(firmwareManagementProfile);
-//
-//        ServerLocalAuthListProfile localAuthListProfile = new ServerLocalAuthListProfile();
-//        server.addFeatureProfile(localAuthListProfile);
-//
-//        ServerReservationProfile serverReservationProfile = new ServerReservationProfile();
-//        server.addFeatureProfile(serverReservationProfile);
-
     }
 
     public boolean isClosed() {
@@ -325,6 +325,13 @@ public class CentralSystem {
         request.setTransactionId(transactionId);
         send(request);
     }
+
+    public void sendRemoteStopTransactionRequest() throws Exception {
+        RemoteStopTransactionRequest request = new RemoteStopTransactionRequest();
+        request.setTransactionId(transactionService.getMaxTransactionId());
+        send(request);
+    }
+
     public void sendResetRequest(ResetType type) throws Exception {
         ResetRequest request = new ResetRequest();
         request.setType(type);
@@ -347,6 +354,7 @@ public class CentralSystem {
             throws Exception {
         ReserveNowRequest request =
                 new ReserveNowRequest(connectorId, expiryDate, idTag, reservationId);
+        reservationService.save(request);
         send(request);
     }
 

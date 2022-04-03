@@ -26,22 +26,29 @@ public class ClientController {
         return service.getAllClients();
     }
 
-    // get client by idToken
-    @GetMapping("/{idtoken}")
-    public Client findByIdToken(@PathVariable(value="idtoken") String idToken) throws ResourceNotFoundException {
-        return service.findByIdToken(idToken);
+//    // get client by idToken
+//    @GetMapping("/{idtoken}")
+//    public Client findByIdToken(@PathVariable(value="idtoken") String idToken) throws ResourceNotFoundException {
+//        return service.findByIdToken(idToken);
+//    }
+
+//    // save client
+//    @PostMapping
+//    public void save(String idToken) throws ResourceNotFoundException {
+//        service.save(idToken);
+//    }
+
+    // DELETE client by id
+    @GetMapping("/delete/{id}")
+    public String deleteClient(@PathVariable("id") int id){
+        service.deleteClient(id);
+        return "redirect:/api/clients/";
     }
 
-    // save client
-    @PostMapping
-    public void save(String idToken) throws ResourceNotFoundException {
-        service.save(idToken);
+    // DELETE all clients
+    @GetMapping("cleanAll")
+    public String cleanAllClients(){
+        service.cleanAll();
+        return "redirect:/api/clients/";
     }
-
-    // delete client by id
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Client> deleteClient(@PathVariable("id") int id){
-        return service.deleteClient(id);
-    }
-
 }

@@ -29,17 +29,48 @@
     <div th:if="${currentSession}">
         <h4><b>CurrentSession</b>: [[${currentSession}]]</h4>
 
-        <button class="btn btn-outline-warning d-block mx-auto">
-            <a th:href="@{'/changeAvailability'}">Change Availability</a>
-        </button>
+        <table class="table table-light table-striped">
+            <tr>
+                <td>
+                    <a th:href="@{'/availability/1'}">Availability Operative</a>
+                </td>
+                <td>
+                    <a th:href="@{'/availability/0'}">Availability Inoperative</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a th:href="@{'/remoteStartTransaction'}">Remote Start Transaction</a>
+                </td>
+                <td>
+                    <a th:href="@{'/remoteStopTransaction'}">Remote Stop Transaction</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a th:href="@{'/clearCache'}">Clear Cache</a>
+                </td>
+                <td>
+                    <a th:href="@{'/unlockConnector'}">Unlock Connector</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a th:href="@{'/reserve'}">Book a reservation</a>
+                </td>
+            </tr>
+        </table>
 
-        <button class="btn btn-outline-primary d-block mx-auto mt-3">
-            <a th:href="@{'/clearCache'}">Clear Cache</a>
-        </button>
 
-        <button class="btn btn-outline-success d-block mx-auto mt-3">
-            <a th:href="@{'/remoteStartTransaction'}">Remote Start Transaction</a>
-        </button>
+<!--        ToDo: Fix Availability Options-->
+<!--        <form th:action="@{'/changeAvailability/'+ ${availability}}" method="POST">-->
+<!--            <select th:filed="*{availability}">-->
+<!--                <option th:value="1" th:name="operative" th:text="Operative"></option>-->
+<!--                <option th:value="0" th:name="inoperative" th:text="InOperative"></option>-->
+<!--            </select>-->
+<!--            <button type="submit" class="btn btn-outline-primary">Send</button>-->
+<!--        </form>-->
+
 
     </div>
 </div>

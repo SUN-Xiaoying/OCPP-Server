@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connecters</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+</head>
+<body>
+<!-- Navbar -->
+<div th:insert="~{components/navbar :: navbar}"></div>
+
+<!-- Back Arrow -->
+<div th:insert="~{components/back :: back}"></div>
+<div class="container">
+    <h4>Connectors</h4>
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th>ConnectorId</th>
+            <th>Status</th>
+            <th>ErrorCode</th>
+            <th>Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="c: ${connects}">
+            <tr>
+                <td>[[${t.connectorId}]]</td>
+                <td>[[${t.status}]]</td>
+                <td>[[${t.errorCode}]]</td>
+                <td>[[${t.timeStamp}]]</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

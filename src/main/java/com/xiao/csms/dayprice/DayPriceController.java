@@ -14,16 +14,11 @@ public class DayPriceController {
 
     @GetMapping("/dayPrice")
     public String showDayPrice(Model m){
+        dayPriceService.cleanCache();
         dayPriceService.saveToday();
         List<DayPrice> prices = dayPriceService.getAll();
         m.addAttribute("prices", prices);
-        return "price";
-    }
-
-    @GetMapping("/cleanPrice")
-    public String cleanDayPrice(){
-        dayPriceService.cleanCache();
-        return "redirect:/dayPrice";
+        return "prices";
     }
 
 }

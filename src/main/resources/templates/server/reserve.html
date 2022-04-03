@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:insert="~{components/navbar :: navbar}"></div>
+    <!-- Back Arrow -->
+    <div th:insert="~{components/back :: back}"></div>
+
+    <div class="container mb-3">
+        <form class="bg-light"
+              th:action="@{/reserve/save}" method="POST" th:object="${reservation}">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" for="cid">ConnectorId</label>
+                <div class="col-sm-8">
+                    <input class="form-control mb-4"
+                           th:field="*{connectorId}"
+                           id="cid"
+                           type="number"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" for="start">From</label>
+                <div class="col-sm-8">
+                    <input class="form-control mb-4"
+                           th:field="*{start}"
+                           id="start"
+                           type="number"
+                           min="1"
+                           max="24"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label" for="stop">To</label>
+                <div class="col-sm-8">
+                    <input class="form-control mb-4"
+                           th:field="*{stop}"
+                           id="stop"
+                           type="number"
+                           min="1"
+                           max="24"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

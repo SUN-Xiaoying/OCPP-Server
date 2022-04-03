@@ -1,6 +1,5 @@
-package com.xiao.csms.impl;
+package com.xiao.csms.server;
 
-import com.xiao.csms.server.CentralSystem;
 import eu.chargetime.ocpp.model.core.AvailabilityType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,17 +31,28 @@ public class CentralSystemImpl {
         return "server/index";
     }
 
-    @GetMapping("/changeAvailability")
-    public String changeAvailability(RedirectAttributes ra) throws Exception {
-        centralSystem.sendChangeAvailabilityRequest(1, AvailabilityType.Inoperative);
+//    @PostMapping("/changeAvailability/{availability}")
+//    public String changeAvailability(@PathVariable("availability") int availability, RedirectAttributes ra) throws Exception {
+//        if(availability == 1){
+//            centralSystem.sendChangeAvailabilityRequest(1, AvailabilityType.Operative);
+//        }else{
+//            centralSystem.sendChangeAvailabilityRequest(1, AvailabilityType.Inoperative);
+//        }
+//        ra.addFlashAttribute("message", "ChangeAvailabilityRequest Sent!");
+//        return "redirect:/";
+//    }
+
+    @GetMapping("/availability/1")
+    public String availabilityOperative(RedirectAttributes ra) throws Exception {
+        centralSystem.sendChangeAvailabilityRequest(1,AvailabilityType.Operative);
         ra.addFlashAttribute("message", "ChangeAvailabilityRequest Sent!");
         return "redirect:/";
     }
 
-    @GetMapping("/clearCache")
-    public String clearCache(RedirectAttributes ra) throws Exception {
-        centralSystem.sendClearCacheRequest();
-        ra.addFlashAttribute("message", "ClearCacheRequest Sent!");
+    @GetMapping("/availability/0")
+    public String availabilityInoperative(RedirectAttributes ra) throws Exception {
+        centralSystem.sendChangeAvailabilityRequest(1,AvailabilityType.Inoperative);
+        ra.addFlashAttribute("message", "ChangeAvailabilityRequest Sent!");
         return "redirect:/";
     }
 
@@ -55,8 +65,22 @@ public class CentralSystemImpl {
 
     @GetMapping("/remoteStopTransaction")
     public String remoteStopTransaction(RedirectAttributes ra) throws Exception {
-        centralSystem.sendRemoteStopTransactionRequest(1);
+        centralSystem.sendRemoteStopTransactionRequest();
         ra.addFlashAttribute("message", "RemoteStopTransactionRequest Sent!");
+        return "redirect:/";
+    }
+
+    @GetMapping("/clearCache")
+    public String clearCache(RedirectAttributes ra) throws Exception {
+        centralSystem.sendClearCacheRequest();
+        ra.addFlashAttribute("message", "ClearCacheRequest Sent!");
+        return "redirect:/";
+    }
+
+    @GetMapping("/unlockConnector")
+    public String unlockConnector(RedirectAttributes ra) throws Exception {
+        centralSystem.sendUnlockConnectorRequest(1);
+        ra.addFlashAttribute("message", "UnlockConnectorRequest Sent!");
         return "redirect:/";
     }
 }
