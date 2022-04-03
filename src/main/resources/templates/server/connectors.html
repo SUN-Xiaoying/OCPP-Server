@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Connecters</title>
+    <title>Connectors</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/list.css}">
@@ -27,10 +27,10 @@
         <tbody>
         <th:block th:each="c: ${connects}">
             <tr>
-                <td>[[${t.connectorId}]]</td>
-                <td>[[${t.status}]]</td>
-                <td>[[${t.errorCode}]]</td>
-                <td>[[${t.timeStamp}]]</td>
+                <td>[[${c.connectorId}]]</td>
+                <td>[[${c.status}]]</td>
+                <td>[[${c.errorCode}]]</td>
+                <td>[[${c.timeStamp}]]</td>
             </tr>
         </th:block>
         </tbody>

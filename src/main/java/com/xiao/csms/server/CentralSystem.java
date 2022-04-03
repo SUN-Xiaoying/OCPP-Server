@@ -1,15 +1,13 @@
 package com.xiao.csms.server;
 
 
-import com.xiao.csms.client.ClientService;
 import com.xiao.csms.connector.Connector;
 import com.xiao.csms.connector.ConnectorService;
-import com.xiao.csms.exceptions.ResourceNotFoundException;
 import com.xiao.csms.reservation.ReservationService;
+import com.xiao.csms.sample.SampleService;
 import com.xiao.csms.transaction.TransactionService;
 import eu.chargetime.ocpp.*;
 import eu.chargetime.ocpp.feature.profile.*;
-import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
 import eu.chargetime.ocpp.model.SessionInformation;
 import eu.chargetime.ocpp.model.core.*;
@@ -28,11 +26,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -42,8 +38,9 @@ public class CentralSystem {
     private IServerAPI server;
 
     @Autowired private ConnectorService connectorService;
-    @Autowired public TransactionService transactionService;
+    @Autowired private TransactionService transactionService;
     @Autowired private ReservationService reservationService;
+    @Autowired private SampleService sampleService;
 
     private String currentIdentifier;
     private UUID currentSessionIndex;
@@ -110,11 +107,12 @@ public class CentralSystem {
                     UUID sessionIndex, MeterValuesRequest request) {
                 logger.info(String.valueOf(request));
 
-                // ToDo: Display SoC
+                // ToDo: Store SampledValue
                 MeterValue[] meterValues = request.getMeterValue();
                 if(meterValues.length > 0){
                     SampledValue[] sampledValues = meterValues[0].getSampledValue();
-                    logger.info("SampledValue MeterValue " + Arrays.toString(sampledValues));
+                    logger.info("SampledValue " + Arrays.toString(sampledValues));
+                    sampleService.create(request);
                 }
 
                 return new MeterValuesConfirmation();
@@ -125,7 +123,6 @@ public class CentralSystem {
                     UUID sessionIndex, StartTransactionRequest request) {
                 logger.info(String.valueOf(request));
 
-                // handle events
                 IdTagInfo tagInfo = new IdTagInfo();
                 tagInfo.setStatus(AuthorizationStatus.Accepted);
 
@@ -162,20 +159,6 @@ public class CentralSystem {
                     UUID sessionIndex, StopTransactionRequest request) {
 
                 logger.info(String.valueOf(request));
-
-//                try {
-//                    TimeUnit.SECONDS.sleep(10);
-//                    MeterValue[] transactionData = request.getTransactionData();
-//                    // ToDo: Display SoC
-//                    if(transactionData.length > 0){
-//                        SampledValue[] sampledValues = transactionData[0].getSampledValue();
-//                        logger.info("SampledValue STOP " + Arrays.toString(sampledValues));
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-
-
                 transactionService.stop(request);
 
                 return new StopTransactionConfirmation();

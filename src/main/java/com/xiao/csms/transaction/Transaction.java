@@ -30,9 +30,6 @@ public class Transaction {
     @Column(name = "meterStart")
     Long meterStart;
 
-    @Column(name = "soc")
-    Long soc;
-
     @Column(name = "stopTime")
     String stopTime;
 
@@ -85,14 +82,6 @@ public class Transaction {
 
     public void setMeterStart(Long meterStart) {
         this.meterStart = meterStart;
-    }
-
-    public Long getSoc() {
-        return soc;
-    }
-
-    public void setSoc(Long soc) {
-        this.soc = soc;
     }
 
     public String getStopTime() {

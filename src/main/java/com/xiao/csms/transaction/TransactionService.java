@@ -1,12 +1,11 @@
 package com.xiao.csms.transaction;
 
 import com.xiao.csms.exceptions.ResourceNotFoundException;
-import eu.chargetime.ocpp.model.core.MeterValuesRequest;
-import eu.chargetime.ocpp.model.core.StartTransactionRequest;
-import eu.chargetime.ocpp.model.core.StopTransactionRequest;
+import eu.chargetime.ocpp.model.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,29 +35,24 @@ public class TransactionService {
         repo.save(t);
     }
 
-//    // SAVE MeterValuesRequest
-//    public void saveMeterValuesRequest(MeterValuesRequest r){
-//        repo.getByConnectorId(r.getConnectorId()).map(target -> {
-//            target.setTransactionId(r.getTransactionId());
-//            repo.save(target);
-//            return target;
-//        });
-//    }
+    // SAVE MeterValuesRequest
+    public void saveMeterValuesRequest(MeterValuesRequest r){
+        // ToDo: Display SoC
+        MeterValue[] meterValues = r.getMeterValue();
+        if(meterValues.length > 0){
+            SampledValue[] sampledValues = meterValues[0].getSampledValue();
+        }
+        repo.getByConnectorId(r.getConnectorId()).map(target -> {
+            target.setTransactionId(r.getTransactionId());
+            repo.save(target);
+            return target;
+        });
+    }
 
     // GET last transaction
     public int getMaxTransactionId(){
         int id = repo.getMaxId();
         return repo.getById(id).getTransactionId();
-    }
-
-    // SAVE StopTransaction
-    public void saveStopRequest(StopTransactionRequest r){
-        repo.getByTransactionId(r.getTransactionId()).map(target -> {
-            target.setMeterStop(Long.valueOf(r.getMeterStop()));
-            target.setStopTime(String.valueOf(r.getTimestamp()));
-            repo.save(target);
-            return target;
-        });
     }
 
     // STOP
@@ -70,7 +64,6 @@ public class TransactionService {
             return target;
         });
     }
-
 
     // DELETE ALL
     public void cleanAll(){repo.cleanAll();}
