@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Samples</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:insert="~{components/navbar :: navbar}"></div>
+
+    <!-- Back Arrow -->
+    <div th:insert="~{components/back :: back}"></div>
+    <div class="container py-5">
+        <h4>Samples</h4>
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th>SoC (%)</th>
+                <th>Temperature (Celsius)</th>
+                <th>Current (A)</th>
+                <th>Voltage (V)</th>
+                <th>Power (W)</th>
+                <th>Energy (Wh)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="s: ${samples}">
+                <tr>
+                    <td>[[${s.soc}]]</td>
+                    <td>[[${s.temperature}]]</td>
+                    <td>[[${s.current}]]</td>
+                    <td>[[${s.voltage}]]</td>
+                    <td>[[${s.power}]]</td>
+                    <td>[[${s.energy}]]</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <button class="btn btn-success d-block mx-auto mt-4">
+            <a th:href="@{'/sample/clean/'+${tid}}">Clean SampledValues</a>
+        </button>
+    </div>
+</body>
+</html>

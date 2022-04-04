@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class SampleService {
     @Autowired private SampleRepo repo;
 
+    // INPUT SampledValues
     public void create(MeterValuesRequest r){
         MeterValue[] meterValues = r.getMeterValue();
         if(meterValues.length > 0){
@@ -20,7 +22,7 @@ public class SampleService {
                 Sample sample = new Sample();
                 sample.setTransactionId(r.getTransactionId());
                 sample.setSoc(Integer.parseInt(sampledValues[0].getValue()));
-                sample.setTempature(sampledValues[1].getValue());
+                sample.setTemperature(sampledValues[1].getValue());
                 sample.setCurrent(sampledValues[2].getValue());
                 sample.setVoltage(sampledValues[3].getValue());
                 sample.setPower(sampledValues[4].getValue());
@@ -29,6 +31,17 @@ public class SampleService {
             }
         }
     }
+
+    // GET by transactionId
+    public List<Sample> getByTid(int tid){
+        return repo.findByTid(tid);
+    }
+
+    // DELETE by transactionId
+    public void deleteByTid(int tid){
+        repo.cleanByTid(tid);
+    }
+
 
     // DELETE ALL
     public void cleanAll(){repo.cleanAll();}

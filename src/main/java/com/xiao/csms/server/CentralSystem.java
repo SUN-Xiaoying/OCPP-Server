@@ -107,11 +107,10 @@ public class CentralSystem {
                     UUID sessionIndex, MeterValuesRequest request) {
                 logger.info(String.valueOf(request));
 
-                // ToDo: Store SampledValue
                 MeterValue[] meterValues = request.getMeterValue();
                 if(meterValues.length > 0){
                     SampledValue[] sampledValues = meterValues[0].getSampledValue();
-                    logger.info("SampledValue " + Arrays.toString(sampledValues));
+//                    logger.info("SampledValue " + Arrays.toString(sampledValues));
                     sampleService.create(request);
                 }
 

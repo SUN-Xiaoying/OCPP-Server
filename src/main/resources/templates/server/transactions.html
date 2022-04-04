@@ -31,7 +31,11 @@
             <tr>
                 <td>[[${t.id}]]</td>
                 <td>[[${t.connectorId}]]</td>
-                <td>[[${t.transactionId}]]</td>
+                <td>
+                    <a th:href="@{'/sample/'+${t.transactionId}}">
+                        [[${t.transactionId}]]
+                    </a>
+                </td>
                 <td>[[${t.startTime}]]</td>
                 <td>[[${t.stopTime}]]</td>
             </tr>

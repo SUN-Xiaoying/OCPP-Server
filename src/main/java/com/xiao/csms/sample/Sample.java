@@ -19,8 +19,8 @@ public class Sample {
     @Column(name="soc", nullable = false)
     int soc;
 
-    @Column(name="tempature")
-    String tempature;
+    @Column(name="temperature")
+    String temperature;
 
     @Column(name="current")
     String current;
@@ -58,12 +58,12 @@ public class Sample {
         this.soc = soc;
     }
 
-    public String getTempature() {
-        return tempature;
+    public String getTemperature() {
+        return temperature;
     }
 
-    public void setTempature(String tempature) {
-        this.tempature = tempature;
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 
     public String getCurrent() {

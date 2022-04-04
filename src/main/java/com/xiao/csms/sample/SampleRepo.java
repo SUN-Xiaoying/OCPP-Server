@@ -6,9 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface SampleRepo extends JpaRepository<Sample, Integer> {
+
+    @Query("SELECT s FROM Sample s WHERE s.transactionId = ?1")
+    public List<Sample> findByTid(int tid);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Sample s WHERE s.transactionId = ?1")
+    public void cleanByTid(int tid);
 
     @Transactional
     @Modifying
