@@ -35,27 +35,13 @@ public class TransactionService {
         repo.save(t);
     }
 
-    // SAVE MeterValuesRequest
-    public void saveMeterValuesRequest(MeterValuesRequest r){
-        // ToDo: Display SoC
-        MeterValue[] meterValues = r.getMeterValue();
-        if(meterValues.length > 0){
-            SampledValue[] sampledValues = meterValues[0].getSampledValue();
-        }
-        repo.getByConnectorId(r.getConnectorId()).map(target -> {
-            target.setTransactionId(r.getTransactionId());
-            repo.save(target);
-            return target;
-        });
-    }
-
     // GET last transaction
     public int getMaxTransactionId(){
         int id = repo.getMaxId();
         return repo.getById(id).getTransactionId();
     }
 
-    // STOP
+    // SAVE StopRequest
     public void stop(StopTransactionRequest r){
         repo.getByTransactionId(r.getTransactionId()).map(target -> {
             target.setMeterStop(Long.valueOf(r.getMeterStop()));
