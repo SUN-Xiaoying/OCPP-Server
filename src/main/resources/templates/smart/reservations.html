@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Samples</title>
+    <title>Reservation</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/list.css}">
@@ -10,38 +10,37 @@
 <body>
     <!-- Navbar -->
     <div th:insert="~{components/navbar :: navbar}"></div>
-
     <!-- Back Arrow -->
     <div th:insert="~{components/back :: back}"></div>
-    <div class="container py-5">
-        <h4>Samples</h4>
+
+    <h4>Reservations</h4>
+    <div class="container mb-3">
         <table class="table table-dark table-striped">
             <thead>
             <tr>
-                <th>SoC (%)</th>
-                <th>Temperature (Celsius)</th>
-                <th>Current (A)</th>
-                <th>Voltage (V)</th>
-                <th>Power (W)</th>
-                <th>Energy (Wh)</th>
+                <th>Reservation Id</th>
+                <th>Transaction Id</th>
+                <th>Date</th>
+                <th>Start</th>
+                <th>Stop</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <th:block th:each="s: ${samples}">
+            <th:block th:each="r: ${reservations}">
                 <tr>
-                    <td>[[${s.soc}]]</td>
-                    <td>[[${s.temperature}]]</td>
-                    <td>[[${s.current}]]</td>
-                    <td>[[${s.voltage}]]</td>
-                    <td>[[${s.power}]]</td>
-                    <td>[[${s.energy}]]</td>
+                    <td>[[${r.reservationId}]]</td>
+                    <td>[[${r.transactionId}]]</td>
+                    <td>[[${r.date}]]</td>
+                    <td>[[${r.start}]]</td>
+                    <td>[[${r.stop}]]</td>
+                    <td>
+                        <a th:href="@{'/reservation/delete/'+${r.reservationId}}">Delete</a>
+                    </td>
                 </tr>
             </th:block>
             </tbody>
         </table>
-        <button class="btn btn-outline-success d-block mx-auto mt-4">
-            <a th:href="@{'/transaction/delete/'+${tid}}">Remove this Transaction</a>
-        </button>
     </div>
 </body>
 <!-- Footer -->

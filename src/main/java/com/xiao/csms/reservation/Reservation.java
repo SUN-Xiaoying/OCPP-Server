@@ -1,5 +1,6 @@
 package com.xiao.csms.reservation;
 
+import eu.chargetime.ocpp.utilities.MoreObjects;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -24,17 +25,20 @@ public class Reservation {
     @Column(name = "transactionId")
     int transactionId;
 
+    @Column(name = "date")
+    String date;
+
     @Column(name = "start")
-    int start;
+    String start;
 
     @Column(name = "stop")
-    int stop;
+    String stop;
 
-    @Column(name = "idTag")
-    String idTag;
+    @Column(name = "startSoC", nullable = false)
+    int startSoC;
 
-    @Column(name = "expiryDate")
-    String expiryDate;
+    @Column(name = "targetSoC", nullable = false)
+    int targetSoC;
 
     public int getId() {
         return id;
@@ -68,45 +72,48 @@ public class Reservation {
         this.transactionId = transactionId;
     }
 
-    public int getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(int start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public int getStop() {
+    public String getStop() {
         return stop;
     }
 
-    public void setStop(int stop) {
+    public void setStop(String stop) {
         this.stop = stop;
     }
 
-    public String getIdTag() {
-        return idTag;
+    public String getDate() {
+        return date;
     }
 
-    public void setIdTag(String idTag) {
-        this.idTag = idTag;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getExpiryDate() {
-        return expiryDate;
+    public int getStartSoC() {
+        return startSoC;
     }
 
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
+    public void setStartSoC(int startSoC) {
+        this.startSoC = startSoC;
+    }
+
+    public int getTargetSoC() {
+        return targetSoC;
+    }
+
+    public void setTargetSoC(int targetSoC) {
+        this.targetSoC = targetSoC;
     }
 
     @Override
     public String toString(){
-        return "Reservation{\n"+
-                "id = " + reservationId + "\n" +
-                "connector = " + connectorId + "\n" +
-                "transaction = " + transactionId + "\n" +
-                "expiryDate = " + expiryDate + "\n" +
-                "}";
+        return MoreObjects.toStringHelper(this).add("reservationId",reservationId).add("connectorId", connectorId).add("start",start).add("stop",stop).add("transactionId", transactionId).add("targetSoC",targetSoC).toString();
     }
 }

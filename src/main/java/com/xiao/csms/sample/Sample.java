@@ -20,19 +20,19 @@ public class Sample {
     int soc;
 
     @Column(name="temperature")
-    String temperature;
+    int temperature;
 
     @Column(name="current")
-    String current;
+    int current;
 
     @Column(name="voltage")
-    String voltage;
+    int voltage;
 
     @Column(name="power")
-    String power;
+    int power;
 
     @Column(name="energy")
-    String energy;
+    int energy;
 
     public int getId() {
         return id;
@@ -58,43 +58,43 @@ public class Sample {
         this.soc = soc;
     }
 
-    public String getTemperature() {
+    public int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
 
-    public String getCurrent() {
+    public int getCurrent() {
         return current;
     }
 
-    public void setCurrent(String current) {
+    public void setCurrent(int current) {
         this.current = current;
     }
 
-    public String getVoltage() {
+    public int getVoltage() {
         return voltage;
     }
 
-    public void setVoltage(String voltage) {
+    public void setVoltage(int voltage) {
         this.voltage = voltage;
     }
 
-    public String getPower() {
+    public int getPower() {
         return power;
     }
 
-    public void setPower(String power) {
+    public void setPower(int power) {
         this.power = power;
     }
 
-    public String getEnergy() {
+    public int getEnergy() {
         return energy;
     }
 
-    public void setEnergy(String energy) {
+    public void setEnergy(int energy) {
         this.energy = energy;
     }
 

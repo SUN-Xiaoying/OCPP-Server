@@ -15,15 +15,12 @@ public class SampleController {
     @GetMapping("/sample/{transactionId}")
     public String showSample(@PathVariable("transactionId") int tid, Model m){
         List<Sample> samples = service.getByTid(tid);
+        if(samples.size()<5){
+            return "redirect:/transaction/delete/{transactionId}";
+        }
         m.addAttribute("samples",samples);
         m.addAttribute("tid",tid);
         return "server/sample";
-    }
-
-    @GetMapping("/sample/clean/{transactionId}")
-    public String cleanSample(@PathVariable("transactionId") int tid, Model m){
-        service.deleteByTid(tid);
-        return "redirect:/transactions";
     }
 
 }

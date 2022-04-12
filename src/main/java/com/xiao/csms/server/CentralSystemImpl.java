@@ -31,17 +31,6 @@ public class CentralSystemImpl {
         return "server/index";
     }
 
-//    @PostMapping("/changeAvailability/{availability}")
-//    public String changeAvailability(@PathVariable("availability") int availability, RedirectAttributes ra) throws Exception {
-//        if(availability == 1){
-//            centralSystem.sendChangeAvailabilityRequest(1, AvailabilityType.Operative);
-//        }else{
-//            centralSystem.sendChangeAvailabilityRequest(1, AvailabilityType.Inoperative);
-//        }
-//        ra.addFlashAttribute("message", "ChangeAvailabilityRequest Sent!");
-//        return "redirect:/";
-//    }
-
     @GetMapping("/availability/1")
     public String availabilityOperative(RedirectAttributes ra) throws Exception {
         centralSystem.sendChangeAvailabilityRequest(1,AvailabilityType.Operative);

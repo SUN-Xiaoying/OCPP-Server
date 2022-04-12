@@ -3,15 +3,19 @@ package com.xiao.csms.server;
 
 import com.xiao.csms.connector.Connector;
 import com.xiao.csms.connector.ConnectorService;
+import com.xiao.csms.helper.Helper;
 import com.xiao.csms.reservation.ReservationService;
 import com.xiao.csms.sample.SampleService;
 import com.xiao.csms.transaction.TransactionService;
 import eu.chargetime.ocpp.*;
-import eu.chargetime.ocpp.feature.profile.*;
+import eu.chargetime.ocpp.feature.profile.ServerCoreEventHandler;
+import eu.chargetime.ocpp.feature.profile.ServerCoreProfile;
+import eu.chargetime.ocpp.feature.profile.ServerSmartChargingProfile;
 import eu.chargetime.ocpp.model.Request;
 import eu.chargetime.ocpp.model.SessionInformation;
 import eu.chargetime.ocpp.model.core.*;
-import eu.chargetime.ocpp.model.firmware.*;
+import eu.chargetime.ocpp.model.firmware.GetDiagnosticsRequest;
+import eu.chargetime.ocpp.model.firmware.UpdateFirmwareRequest;
 import eu.chargetime.ocpp.model.localauthlist.GetLocalListVersionRequest;
 import eu.chargetime.ocpp.model.localauthlist.SendLocalListRequest;
 import eu.chargetime.ocpp.model.localauthlist.UpdateType;
@@ -27,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Slf4j
@@ -128,7 +131,7 @@ public class CentralSystem {
                 StartTransactionConfirmation confirmation = new StartTransactionConfirmation();
                 confirmation.setIdTagInfo(tagInfo);
                 // Random tansactionId
-                int tid = 10000 + (int)(Math.random()*10000);
+                int tid = Helper.randomFiveDigits();
                 confirmation.setTransactionId(tid);
                 // save to DB
                 transactionService.saveStartRequest(request, tid);
@@ -336,7 +339,6 @@ public class CentralSystem {
             throws Exception {
         ReserveNowRequest request =
                 new ReserveNowRequest(connectorId, expiryDate, idTag, reservationId);
-        reservationService.save(request);
         send(request);
     }
 

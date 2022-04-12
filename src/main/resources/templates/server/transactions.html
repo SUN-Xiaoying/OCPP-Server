@@ -16,6 +16,9 @@
 
 <div class="container py-5">
     <h4>Transactions</h4>
+    <div th:if="${message}" class="alert alert-success test-center">
+        [[${message}]]
+    </div>
     <table class="table table-dark table-striped">
         <thead>
         <tr>
@@ -24,6 +27,8 @@
             <th>Transaction Id</th>
             <th>Start Time</th>
             <th>Stop Time</th>
+            <th>Smart Charging</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -38,15 +43,24 @@
                 </td>
                 <td>[[${t.startTime}]]</td>
                 <td>[[${t.stopTime}]]</td>
+                <td>
+                    <a th:href="@{'/reservation/'+${t.transactionId}}">
+                        If Reserve
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{'/transaction/delete/'+${t.transactionId}}">Delete</a>
+                </td>
             </tr>
         </th:block>
         </tbody>
     </table>
 
     <button class="btn btn-success d-block mx-auto mt-4">
-        <a href="/cleanTransactions">Clean all transactions</a>
+        <a href="/transaction/cleanAll">Clean all transactions</a>
     </button>
 </div>
-
 </body>
+<!-- Footer -->
+<div th:insert="~{components/footer :: footer}"></div>
 </html>

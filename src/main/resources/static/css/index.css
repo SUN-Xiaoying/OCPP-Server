@@ -7,6 +7,12 @@
 body {
     width: 100%;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+h4{
+    text-align: center;
 }
 
 .main-container{
@@ -17,4 +23,5 @@ footer{
     height: 80px;
     text-align: center;
     line-height: 80px;
+    padding-top: 40%;
 }

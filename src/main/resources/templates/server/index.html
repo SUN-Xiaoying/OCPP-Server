@@ -20,6 +20,9 @@
 </div>
 
 <div class="container py-5">
+    <button class="btn btn-outline-warning d-block mx-auto mt-4">
+        <a href="/reservation">Book a Reservation</a>
+    </button>
     <h4>
         Is server closed?: <b>[[${isClosed}]]</b>
     </h4>
@@ -60,17 +63,6 @@
                 </td>
             </tr>
         </table>
-
-
-<!--        ToDo: Fix Availability Options-->
-<!--        <form th:action="@{'/changeAvailability/'+ ${availability}}" method="POST">-->
-<!--            <select th:filed="*{availability}">-->
-<!--                <option th:value="1" th:name="operative" th:text="Operative"></option>-->
-<!--                <option th:value="0" th:name="inoperative" th:text="InOperative"></option>-->
-<!--            </select>-->
-<!--            <button type="submit" class="btn btn-outline-primary">Send</button>-->
-<!--        </form>-->
-
 
     </div>
 </div>

@@ -19,6 +19,11 @@ public interface ReservationRepo extends JpaRepository<Reservation, Integer> {
 
     @Transactional
     @Modifying
+    @Query("DELETE FROM Reservation r WHERE r.reservationId=?1")
+    public void deleteByRid(int rid);
+
+    @Transactional
+    @Modifying
     @Query("DELETE FROM Reservation r WHERE r.id>0")
     public void cleanAll();
 }

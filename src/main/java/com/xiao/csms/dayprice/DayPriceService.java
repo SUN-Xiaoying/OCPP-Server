@@ -1,6 +1,6 @@
 package com.xiao.csms.dayprice;
 
-
+import com.xiao.csms.helper.Helper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +24,6 @@ public class DayPriceService{
     private DayPriceRepo repo;
 
     private static final int MAX_HOUR = 24;
-    private static final String todayDot = Helper.getTodayDot();
-    private static final String tomorrowDot = Helper.getTomorrowDot();
 
     public String findDayPrice(String date){
         try {
@@ -58,7 +57,7 @@ public class DayPriceService{
             for(int i=0; i<MAX_HOUR; i++){
                 DayPrice dp = new DayPrice();
                 dp.setDate(date);
-                dp.setHour(i+1);
+                dp.setHour(i);
                 dp.setPrice(result.get(i));
                 repo.save(dp);
             }
@@ -67,19 +66,35 @@ public class DayPriceService{
         }
     }
 
-    // save the price of today
+    // SAVE the price of today and tomorrow
     public void saveToday(){
-        saveDayPrice(todayDot);
-        saveDayPrice(tomorrowDot);
+        saveDayPrice(Helper.DotFormatter(ZonedDateTime.now()));
+        saveDayPrice(Helper.DotFormatter(ZonedDateTime.now().plusDays(1)));
     }
 
-    // get all prices
+    // GET all prices
     public List<DayPrice> getAll(){
         return repo.findAll();
     }
 
-    // clean the table
+    // CLEAN all cache
     public void cleanCache(){
         repo.cleanAll();
     }
+
+    // GET prices in next N hours
+    public List<DayPrice> getPricesInNextHours(String date, int interval){
+        ZonedDateTime current = ZonedDateTime.parse(date);
+        String currentDay = Helper.DotFormatter(current);
+        int currentHour = current.getHour();
+        return repo.getAllBetweenInterval(repo.getCurrentId(currentDay,currentHour), interval);
+    }
+
+    // GET date.hour Price
+    public double getHourlyPrice(String date, int hour){
+        ZonedDateTime current = ZonedDateTime.parse(date);
+        String targetDay = Helper.DotFormatter(current);
+        return repo.getHourlyPrice(targetDay, hour);
+    }
+
 }

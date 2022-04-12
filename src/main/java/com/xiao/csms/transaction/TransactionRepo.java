@@ -24,6 +24,11 @@ public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
 
     @Transactional
     @Modifying
+    @Query("DELETE FROM Transaction t WHERE t.transactionId=?1")
+    public void deleteByTid(int tid);
+
+    @Transactional
+    @Modifying
     @Query("DELETE FROM Transaction t WHERE t.id>0")
     public void cleanAll();
 }

@@ -9,7 +9,7 @@ public class DayPrice {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(name = "date")
     private String date;
@@ -20,11 +20,11 @@ public class DayPrice {
     @Column(name = "price")
     private double price;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

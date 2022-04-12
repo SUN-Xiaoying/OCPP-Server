@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+</head>
+<body>
+<!-- Navbar -->
+<div th:insert="~{components/navbar :: navbar}"></div>
+
+<h4>Bingo</h4>
+<div class="container mb-4">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Normal</th>
+            <th>Smart</th>
+            <th>Difference</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="c:${comparison}">
+            <tr>
+                <th>Cost (SEK)</th>
+                <td>[[${c.currentCost}]]</td>
+                <td>[[${c.smartCost}]]</td>
+                <td>[[${c.profit}]]</td>
+            </tr>
+            <tr>
+                <th>Time (h)</th>
+                <td>[[${c.currentEndTime}]]</td>
+                <td>[[${c.smartEndTime}]]</td>
+                <td>[[${c.delay}]]</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <button class="btn btn-warning d-block mx-auto mt-4">
+        <a href="/reservations">Check Reservation List</a>
+    </button>
+</div>
+
+</body>
+<!-- Footer -->
+<div th:insert="~{components/footer :: footer}"></div>
+</html>

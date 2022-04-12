@@ -15,7 +15,7 @@ public class DayPriceController {
 
     @GetMapping("/dayPrice")
     public String showDayPrice(Model m){
-        dayPriceService.saveToday();
+        dayPriceService.saveDayPrice("2022-04-04T12:47:56.356Z");
         List<DayPrice> prices = dayPriceService.getAll();
         m.addAttribute("prices", prices);
         return "prices";
@@ -24,6 +24,7 @@ public class DayPriceController {
     @GetMapping("/dayPrice/update")
     public String refreshPrice(RedirectAttributes ra){
         dayPriceService.cleanCache();
+        dayPriceService.saveToday();
         ra.addFlashAttribute("message","Prices Updated");
         return "redirect:/dayPrice";
     }
