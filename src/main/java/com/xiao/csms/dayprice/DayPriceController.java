@@ -15,7 +15,7 @@ public class DayPriceController {
 
     @GetMapping("/dayPrice")
     public String showDayPrice(Model m){
-        dayPriceService.saveDayPrice("2022-04-04T12:47:56.356Z");
+//        dayPriceService.saveDayPrice("2022-04-04T12:47:56.356Z");
         List<DayPrice> prices = dayPriceService.getAll();
         m.addAttribute("prices", prices);
         return "prices";

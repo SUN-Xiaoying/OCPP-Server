@@ -26,8 +26,9 @@ public class ReservationController {
     @Autowired SampleService sampleService;
     @Autowired DayPriceService dayPriceService;
     // Max(Outlet.Power) of KemPower Connector, kW
-    private static final double maxPower=125000.0;
+    private static final double maxPower=131400.0;
 
+    private boolean debug = true;
     @GetMapping("/reservations")
     public String showReservations(Model m){
         List<Reservation> reservations = service.getAll();
@@ -42,8 +43,11 @@ public class ReservationController {
         reservation.setTransactionId(tid);
         reservation.setConnectorId(t.getConnectorId());
         ZonedDateTime dateTime = ZonedDateTime.parse(t.getStartTime());
+        System.out.println("RAW: "+dateTime);
+
         reservation.setDate(Helper.DotFormatter(dateTime));
         String start= dateTime.getHour()+":"+dateTime.getMinute();
+        System.out.println("START: "+start);
         reservation.setStart(start);
         reservation.setStartSoC(sampleService.getStartSoC(tid));
         m.addAttribute("title", "Transaction "+tid);
@@ -74,11 +78,13 @@ public class ReservationController {
         Transaction t = transactionService.getByTid(tid);
         double energy = sampleService.estimateEnergy(targetSoC, tid);
         double totalTime = energy/maxPower;
-        comparison.setCurrentEndTime(String.valueOf(totalTime));
+
         // Hour remains for current hour
         String startTime = t.getStartTime();
         double remainingHour = 1.0 - (ZonedDateTime.parse(startTime).getMinute()/60.0);
+        String endTry = ZonedDateTime.parse(startTime).plusMinutes((long)(totalTime*60)).toString();
 
+        comparison.setCurrentEndTime(endTry);
         // GET normal price
         double[] prices = Helper.getPriceList(dayPriceService.getPricesInNextHours(ZonedDateTime.now().toString(), 1));
         if(totalTime <= remainingHour){

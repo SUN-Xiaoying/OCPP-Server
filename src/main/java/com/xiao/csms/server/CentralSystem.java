@@ -50,15 +50,17 @@ public class CentralSystem {
 
     private boolean isStarted;
 
+    private boolean debug=false;
+
     public ServerCoreEventHandler createServerCoreEventHandler() {
 
         return new ServerCoreEventHandler() {
             @Override
             public AuthorizeConfirmation handleAuthorizeRequest(
                     UUID sessionIndex, AuthorizeRequest request) {
-
-                logger.info(String.valueOf(request));
-                
+                if(debug) {
+                    logger.info(String.valueOf(request));
+                }
                 AuthorizeConfirmation confirmation = new AuthorizeConfirmation();
                 IdTagInfo tagInfo = new IdTagInfo();
                 tagInfo.setStatus(AuthorizationStatus.Accepted);
@@ -72,8 +74,9 @@ public class CentralSystem {
             @Override
             public BootNotificationConfirmation handleBootNotificationRequest(
                     UUID sessionIndex, BootNotificationRequest request) {
-
-                logger.info(String.valueOf(request));
+                if(debug){
+                    logger.info(String.valueOf(request));
+                }
 
                 BootNotificationConfirmation confirmation = new BootNotificationConfirmation();
                 try {
@@ -90,8 +93,9 @@ public class CentralSystem {
             public DataTransferConfirmation handleDataTransferRequest(
                     UUID sessionIndex, DataTransferRequest request) {
 
-                logger.info(String.valueOf(request));
-
+                if(debug){
+                    logger.info(String.valueOf(request));
+                }
                 DataTransferConfirmation confirmation = new DataTransferConfirmation();
                 confirmation.setStatus(DataTransferStatus.Accepted);
                 return confirmation;
@@ -108,8 +112,9 @@ public class CentralSystem {
             @Override
             public MeterValuesConfirmation handleMeterValuesRequest(
                     UUID sessionIndex, MeterValuesRequest request) {
-                logger.info(String.valueOf(request));
-
+                if(debug){
+                    logger.info(String.valueOf(request));
+                }
                 MeterValue[] meterValues = request.getMeterValue();
                 if(meterValues.length > 0){
                     SampledValue[] sampledValues = meterValues[0].getSampledValue();
@@ -123,8 +128,9 @@ public class CentralSystem {
             @Override
             public StartTransactionConfirmation handleStartTransactionRequest(
                     UUID sessionIndex, StartTransactionRequest request) {
-                logger.info(String.valueOf(request));
-
+                if(debug){
+                    logger.info(String.valueOf(request));
+                }
                 IdTagInfo tagInfo = new IdTagInfo();
                 tagInfo.setStatus(AuthorizationStatus.Accepted);
 
@@ -141,9 +147,9 @@ public class CentralSystem {
             @Override
             public StatusNotificationConfirmation handleStatusNotificationRequest(
                     UUID sessionIndex, StatusNotificationRequest request) {
-
-                logger.info(String.valueOf(request));
-
+                if(debug){
+                    logger.info(String.valueOf(request));
+                }
                 // save connectorInfo to MySQL
                 Connector connector = new Connector();
                 connector.setConnectorId(request.getConnectorId());
@@ -159,8 +165,9 @@ public class CentralSystem {
             @Override
             public StopTransactionConfirmation handleStopTransactionRequest(
                     UUID sessionIndex, StopTransactionRequest request) {
-
-                logger.info(String.valueOf(request));
+                if(debug){
+                    logger.info(String.valueOf(request));
+                }
                 transactionService.stop(request);
 
                 return new StopTransactionConfirmation();

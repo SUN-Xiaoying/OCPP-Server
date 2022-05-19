@@ -1,8 +1,16 @@
 package com.xiao.csms.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xiao.csms.connector.Connector;
+import com.xiao.csms.connector.ConnectorService;
+import com.xiao.csms.transaction.Transaction;
+import com.xiao.csms.transaction.TransactionService;
 import eu.chargetime.ocpp.model.core.AvailabilityType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 @AllArgsConstructor
@@ -17,6 +27,9 @@ import javax.annotation.PostConstruct;
 @Controller
 public class CentralSystemImpl {
     private final CentralSystem centralSystem;
+
+    @Autowired ConnectorService connectorService;
+    @Autowired TransactionService transactionService;
 
     @PostConstruct
     public void startServer() throws Exception {
@@ -59,6 +72,7 @@ public class CentralSystemImpl {
         return "redirect:/";
     }
 
+
     @GetMapping("/clearCache")
     public String clearCache(RedirectAttributes ra) throws Exception {
         centralSystem.sendClearCacheRequest();
@@ -72,4 +86,27 @@ public class CentralSystemImpl {
         ra.addFlashAttribute("message", "UnlockConnectorRequest Sent!");
         return "redirect:/";
     }
+
+    // API
+//    @GetMapping("/api/start")
+//    public ResponseEntity<String> getStartCharging() throws JsonProcessingException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Transaction t = transactionService.getByTid(transactionService.getMaxTransactionId());
+//        if(centralSystem.conncted() && t!=null){
+//            return ResponseEntity.ok(objectMapper.writeValueAsString(t));
+//        }else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+//
+//    @GetMapping("/api/stop")
+//    public ResponseEntity<String> getStopCharging() throws IOException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Transaction t = transactionService.getByTid(transactionService.getMaxTransactionId());
+//        if(centralSystem.conncted()&& t!=null){
+//            return ResponseEntity.ok(objectMapper.writeValueAsString(t));
+//        }else{
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 }
