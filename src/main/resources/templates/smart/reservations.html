@@ -14,7 +14,13 @@
     <div th:insert="~{components/back :: back}"></div>
 
     <h4>Reservations</h4>
+
     <div class="container mb-3">
+
+        <button class="btn btn-outline-danger d-block mx-auto m-4">
+            <a href="/reservation/cleanAll">Clean all reservations</a>
+        </button>
+
         <table class="table table-dark table-striped">
             <thead>
             <tr>
@@ -29,8 +35,16 @@
             <tbody>
             <th:block th:each="r: ${reservations}">
                 <tr>
-                    <td>[[${r.reservationId}]]</td>
-                    <td>[[${r.transactionId}]]</td>
+                    <td>
+                        <a th:href="@{'/result/'+${r.reservationId}}">
+                            [[${r.reservationId}]]
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{'/sample/'+${r.transactionId}}">
+                            [[${r.transactionId}]]
+                        </a>
+                    </td>
                     <td>[[${r.date}]]</td>
                     <td>[[${r.start}]]</td>
                     <td>[[${r.stop}]]</td>

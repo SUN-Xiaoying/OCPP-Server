@@ -1,34 +1,36 @@
 package com.xiao.csms.reservation;
 
+import com.xiao.csms.helper.Helper;
 import lombok.NoArgsConstructor;
 
 import java.text.DecimalFormat;
 
 @NoArgsConstructor
 public class Comparison {
-    int transactionId;
-    double currentCost;
+    int reservationId;
+    double uncontrolledCost;
     double smartCost;
     double profit;
-    String currentEndTime;
-    String smartEndTime;
-    double delay;
+    String actualTime;
+    String estimatedTime;
+    String ape;
+    private static DecimalFormat df = new DecimalFormat("0.000");
 
-    DecimalFormat df = new DecimalFormat("0.000");
-
-    public int getTransactionId() {
-        return transactionId;
+    public int getReservationId() {
+        return reservationId;
     }
 
-    public void setTransactionId(int transactionId) {
-        this.transactionId = transactionId;
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
     }
 
-    public double getCurrentCost() {
-        return currentCost;
+    public double getUncontrolledCost() {
+        return uncontrolledCost;
     }
 
-    public void setCurrentCost(double currentCost) {this.currentCost = Double.parseDouble(df.format(currentCost));}
+    public void setUncontrolledCost(double uncontrolledCost) {
+        this.uncontrolledCost = Double.parseDouble(df.format(uncontrolledCost));
+    }
 
     public double getSmartCost() {
         return smartCost;
@@ -43,30 +45,30 @@ public class Comparison {
     }
 
     public void setProfit() {
-        this.profit = currentCost-smartCost;
+        this.profit = Double.parseDouble(df.format(uncontrolledCost - smartCost));
     }
 
-    public String getCurrentEndTime() {
-        return currentEndTime;
+    public String getActualTime() {
+        return actualTime;
     }
 
-    public void setCurrentEndTime(String currentEndTime) {
-        this.currentEndTime = currentEndTime;
+    public void setActualTime(String actualTime) {
+        this.actualTime = actualTime;
     }
 
-    public String getSmartEndTime() {
-        return smartEndTime;
+    public String getEstimatedTime() {
+        return estimatedTime;
     }
 
-    public void setSmartEndTime(String smartEndTime) {
-        this.smartEndTime = smartEndTime;
+    public void setEstimatedTime(String estimatedTime) {
+        this.estimatedTime = estimatedTime;
     }
 
-    public double getDelay() {
-        return delay;
+    public String getApe() {
+        return ape;
     }
 
-    public void setDelay(double delay) {
-        this.delay = delay;
+    public void setApe() {
+        this.ape = Helper.ape(this.actualTime, this.estimatedTime);
     }
 }

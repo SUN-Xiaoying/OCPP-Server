@@ -30,8 +30,6 @@ public class TransactionService {
     public void saveStartRequest(StartTransactionRequest request, int tid){
         Transaction t = new Transaction();
         t.setConnectorId(request.getConnectorId());
-//        t.setIdTag(request.getIdTag());
-//        t.setMeterStart(Long.valueOf(request.getMeterStart()));
         t.setStartTime(String.valueOf(request.getTimestamp()));
         t.setTransactionId(tid);
         repo.save(t);
@@ -47,6 +45,9 @@ public class TransactionService {
         return repo.getById(repo.getMaxId());
     }
 
+    public int getLastConnector(){
+        return repo.getById(repo.getMaxId()).getConnectorId();
+    }
     // SAVE StopRequest
     public void stop(StopTransactionRequest r){
         repo.getByTransactionId(r.getTransactionId()).map(target -> {
@@ -67,4 +68,7 @@ public class TransactionService {
 
     // DELETE ALL
     public void cleanAll(){repo.cleanAll();}
+
+
+
 }

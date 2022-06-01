@@ -36,6 +36,10 @@ public class SampleService {
     public List<Sample> getByTid(int tid){
         return repo.findByTid(tid);
     }
+    public int getThirdPower(int tid){
+        List<Sample> samples = getByTid(tid);
+        return samples.get(2).getPower();
+    }
 
     // GET Start SoC
     public int getStartSoC(int tid){
@@ -75,7 +79,7 @@ public class SampleService {
 
         for (int i=0; i<rounds; i++) {
             dSoC = samples.get(i+2).getSoc()-samples.get(i).getSoc();
-            dSoC = dSoC==0.0 ? 0.3 : dSoC;
+            dSoC = dSoC==0.0 ? 0.23 : dSoC;
             dEnergy = samples.get(i+2).getEnergy()-samples.get(i).getEnergy();
             sum += dEnergy*100.0 / dSoC;
         }
@@ -85,6 +89,7 @@ public class SampleService {
     // Unit kWh
     public double estimateEnergy(int targetSoC, int tid){
         double capacity = estimateCapacity(tid);
+        System.out.println("Capcity: " + capacity);
         int startSoC = repo.getStartSoC(tid);
         return capacity*(targetSoC-startSoC)/100.0;
     }

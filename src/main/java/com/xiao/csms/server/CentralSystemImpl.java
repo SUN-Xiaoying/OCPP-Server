@@ -60,8 +60,9 @@ public class CentralSystemImpl {
 
     @GetMapping("/remoteStartTransaction")
     public String remoteStartTransaction(RedirectAttributes ra) throws Exception {
-        centralSystem.sendRemoteStartTransactionRequest(1, "testId");
-        ra.addFlashAttribute("message", "RemoteStartTransactionRequest Sent!");
+        int cid = transactionService.getLastConnector();
+        centralSystem.sendRemoteStartTransactionRequest(cid, null);
+        ra.addFlashAttribute("message", "Remote Start Transaction Request Sent!");
         return "redirect:/";
     }
 
@@ -88,25 +89,26 @@ public class CentralSystemImpl {
     }
 
     // API
-//    @GetMapping("/api/start")
-//    public ResponseEntity<String> getStartCharging() throws JsonProcessingException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Transaction t = transactionService.getByTid(transactionService.getMaxTransactionId());
-//        if(centralSystem.conncted() && t!=null){
-//            return ResponseEntity.ok(objectMapper.writeValueAsString(t));
-//        }else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//
-//    @GetMapping("/api/stop")
-//    public ResponseEntity<String> getStopCharging() throws IOException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Transaction t = transactionService.getByTid(transactionService.getMaxTransactionId());
-//        if(centralSystem.conncted()&& t!=null){
-//            return ResponseEntity.ok(objectMapper.writeValueAsString(t));
-//        }else{
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @GetMapping("/api/start")
+    public ResponseEntity<Transaction> getStartCharging() throws Exception {
+
+        Transaction t = transactionService.getByTid(transactionService.getMaxTransactionId());
+        if(centralSystem.conncted() && t!=null){
+            centralSystem.sendRemoteStartTransactionRequest(t.getConnectorId(),null);
+            return ResponseEntity.ok().body(t);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/api/stop")
+    public ResponseEntity<Transaction> getStopCharging() throws Exception {
+        Transaction t = transactionService.getByTid(transactionService.getMaxTransactionId());
+        if(centralSystem.conncted()&& t!=null){
+            centralSystem.sendRemoteStopTransactionRequest();
+            return ResponseEntity.ok().body(t);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

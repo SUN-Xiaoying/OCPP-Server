@@ -25,8 +25,7 @@ public class ReservationController {
     @Autowired TransactionService transactionService;
     @Autowired SampleService sampleService;
     @Autowired DayPriceService dayPriceService;
-    // Max(Outlet.Power) of KemPower Connector, kW
-    private static final double maxPower=131400.0;
+
 
     private boolean debug = true;
     @GetMapping("/reservations")
@@ -43,11 +42,9 @@ public class ReservationController {
         reservation.setTransactionId(tid);
         reservation.setConnectorId(t.getConnectorId());
         ZonedDateTime dateTime = ZonedDateTime.parse(t.getStartTime());
-        System.out.println("RAW: "+dateTime);
 
         reservation.setDate(Helper.DotFormatter(dateTime));
         String start= dateTime.getHour()+":"+dateTime.getMinute();
-        System.out.println("START: "+start);
         reservation.setStart(start);
         reservation.setStartSoC(sampleService.getStartSoC(tid));
         m.addAttribute("title", "Transaction "+tid);
@@ -72,29 +69,44 @@ public class ReservationController {
         return "redirect:/reservations";
     }
 
+    @GetMapping("reservation/cleanAll")
+    public String cleanReservations(){
+        service.cleanAll();
+        return "redirect:/reservations";
+    }
+
     public Comparison makeComparison(int targetSoC, int interval, int tid){
         Comparison comparison = new Comparison();
+
         // Unit hour
         Transaction t = transactionService.getByTid(tid);
+        int power = sampleService.getThirdPower(tid);
         double energy = sampleService.estimateEnergy(targetSoC, tid);
-        double totalTime = energy/maxPower;
+        System.out.println("Power: " + power +"\nEnergy: " + energy);
 
+        double totalTime = energy/power;
+        System.out.println("Hour: " + totalTime);
         // Hour remains for current hour
         String startTime = t.getStartTime();
+        String stopTime = t.getStopTime();
         double remainingHour = 1.0 - (ZonedDateTime.parse(startTime).getMinute()/60.0);
-        String endTry = ZonedDateTime.parse(startTime).plusMinutes((long)(totalTime*60)).toString();
+        String estimatedTime = ZonedDateTime.parse(startTime).plusMinutes((long)(totalTime*60)).toString();
 
-        comparison.setCurrentEndTime(endTry);
-        // GET normal price
+        // SET Time
+        comparison.setActualTime(stopTime);
+        comparison.setEstimatedTime(estimatedTime);
+        comparison.setApe();
+
+        // SET Uncontrolled Cost
         double[] prices = Helper.getPriceList(dayPriceService.getPricesInNextHours(ZonedDateTime.now().toString(), 1));
         if(totalTime <= remainingHour){
-            comparison.setCurrentCost(totalTime* prices[0]);
+            comparison.setUncontrolledCost(totalTime* prices[0]);
         }else{
             double timeLeft = totalTime - remainingHour;
-            comparison.setCurrentCost(totalTime* prices[0] + timeLeft*prices[1]);
+            comparison.setUncontrolledCost(totalTime* prices[0] + timeLeft*prices[1]);
         }
 
-        // GET smart Prices
+        // SET Smart Cost
         double[] orderedPrices = Helper.getPriceList(dayPriceService.getPricesInNextHours(ZonedDateTime.now().toString(), interval));
         Arrays.sort(orderedPrices);
         if(totalTime<=1.0){
@@ -103,7 +115,8 @@ public class ReservationController {
             double timeLeft = totalTime - 1.0;
             comparison.setSmartCost(orderedPrices[0] + (timeLeft*orderedPrices[1]));
         }
-        // GET profit
+
+        // SET Profit
         comparison.setProfit();
 
         return comparison;

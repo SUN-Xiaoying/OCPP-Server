@@ -13,32 +13,44 @@
 
 <h4>Bingo</h4>
 <div class="container mb-4">
-    <table class="table">
+
+    <th:block th:each="c:${comparison}">
+    <table class="table" id="cost">
         <thead>
         <tr>
-            <th>#</th>
-            <th>Normal</th>
+            <th></th>
+            <th>Uncontrolled</th>
             <th>Smart</th>
-            <th>Difference</th>
+            <th>Profit</th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="c:${comparison}">
             <tr>
                 <th>Cost (SEK)</th>
-                <td>[[${c.currentCost}]]</td>
+                <td>[[${c.uncontrolledCost}]]</td>
                 <td>[[${c.smartCost}]]</td>
                 <td>[[${c.profit}]]</td>
             </tr>
-            <tr>
-                <th>Time (h)</th>
-                <td>[[${c.currentEndTime}]]</td>
-                <td>[[${c.smartEndTime}]]</td>
-                <td>[[${c.delay}]]</td>
-            </tr>
-        </th:block>
         </tbody>
     </table>
+        <br/>
+    <table class="table" id="time">
+        <thead>
+            <th></th>
+            <th>Actual Time</th>
+            <th>Estimated Time</th>
+            <th>APE</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+            <td>[[${c.actualTime}]]</td>
+            <td>[[${c.estimatedTime}]]</td>
+            <td>[[${c.ape}]]</td>
+        </tr>
+        </tbody>
+    </table>
+    </th:block>
     <button class="btn btn-warning d-block mx-auto mt-4">
         <a href="/reservations">Check Reservation List</a>
     </button>

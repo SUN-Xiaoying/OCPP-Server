@@ -2,6 +2,7 @@ package com.xiao.csms.helper;
 
 import com.xiao.csms.dayprice.DayPrice;
 
+import java.text.DecimalFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,15 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Helper {
-
+    private static DecimalFormat df = new DecimalFormat("0.000");
     // Generate random five five digits
     public static int randomFiveDigits(){
         return 10000 + (int)(Math.random()*10000);
     }
-
-    // Max(Outlet.Power) of KemPower Connector, kW
-    private static final double maxPower=125000.0;
-
     public static String DotFormatter(ZonedDateTime dateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy");
         return dateTime.format(formatter);
@@ -34,26 +31,16 @@ public class Helper {
         }
         return result;
     }
+    // Absolute Percentage Error
+    public static String ape(String actual, String estimated){
+        ZonedDateTime at = ZonedDateTime.parse(actual);
+        ZonedDateTime et = ZonedDateTime.parse(estimated);
+        int av = at.getHour()*60*60 + at.getMinute()*60 + at.getSecond();
+        int ev = et.getHour()*60*60 + et.getMinute()*60 + et.getSecond();
+        double result = Math.abs(av-ev)* 100.0 /(double)av;
 
-    // Root Mean Square
-    public static double rms(double[] nums){
-        double square = 0;
-        double mean = 0;
-        double root = 0;
-
-        // Calculate square.
-        for (double num : nums) {
-            square += Math.pow(num, 2);
-        }
-
-        // Calculate Mean.
-        mean = (square / (double) (nums.length));
-
-        // Calculate Root.
-        root = Math.sqrt(mean);
-        return root;
+        return df.format(result)+"%";
     }
-
     // Unit: SEK / KWh
     public static double[] getPriceList(List<DayPrice> dps){
         int size=dps.size();
@@ -88,10 +75,4 @@ public class Helper {
         return sum/nums.length;
     }
 
-//    public int[] priceRunner(String startTime){
-//        ZonedDateTime start = ZonedDateTime.parse(startTime);
-//        int hour = start.getHour();
-//
-//
-//    }
 }

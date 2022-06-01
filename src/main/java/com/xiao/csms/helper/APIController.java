@@ -37,24 +37,24 @@ public class APIController {
         }
     }
 
-    @GetMapping("start")
-    public ResponseEntity<Transaction> getStartCharging() throws IOException {
-        Transaction t = transactionService.getLastTransaction();
-        if(t==null){
-            return ResponseEntity.notFound().build();
-        }else {
-            return ResponseEntity.ok().body(t);
-        }
-    }
-
-    @GetMapping("stop")
-    public ResponseEntity<Transaction> getStopCharging() throws IOException {
-        Transaction t = transactionService.getLastTransaction();
-        if(t==null){
-            return ResponseEntity.notFound().build();
-        }else{
-            return ResponseEntity.ok().body(t);
-        }
-    }
+//    @GetMapping("start")
+//    public ResponseEntity<Transaction> getStartCharging() throws IOException {
+//        Transaction t = transactionService.getLastTransaction();
+//        if(t==null){
+//            return ResponseEntity.notFound().build();
+//        }else {
+//            return ResponseEntity.ok().body(t);
+//        }
+//    }
+//
+//    @GetMapping("stop")
+//    public ResponseEntity<Transaction> getStopCharging() throws IOException {
+//        Transaction t = transactionService.getLastTransaction();
+//        if(t==null){
+//            return ResponseEntity.notFound().build();
+//        }else{
+//            return ResponseEntity.ok().body(t);
+//        }
+//    }
 
 }
