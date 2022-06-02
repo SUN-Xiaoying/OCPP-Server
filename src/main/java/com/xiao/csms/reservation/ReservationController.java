@@ -82,10 +82,9 @@ public class ReservationController {
         Transaction t = transactionService.getByTid(tid);
         int power = sampleService.getThirdPower(tid);
         double energy = sampleService.estimateEnergy(targetSoC, tid);
-        System.out.println("Power: " + power +"\nEnergy: " + energy);
 
         double totalTime = energy/power;
-        System.out.println("Hour: " + totalTime);
+
         // Hour remains for current hour
         String startTime = t.getStartTime();
         String stopTime = t.getStopTime();

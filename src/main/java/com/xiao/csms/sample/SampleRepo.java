@@ -30,9 +30,7 @@ public interface SampleRepo extends JpaRepository<Sample, Integer> {
     @Query("DELETE FROM Sample s WHERE s.id>0")
     public void cleanAll();
 
-    @Query("SELECT count(s)>2 FROM Sample s WHERE s.transactionId=?1")
-    public boolean isEnough(int tid);
+    @Query("SELECT MAX(s.soc) FROM Sample s WHERE s.transactionId=?1 ORDER BY s.id DESC ")
+    public int getMaxSampleSoC(int tid);
 
-//    @Query("SELECT s FROM Sample s WHERE s.id ")
-//    public List<Sample> findTopThreeByTid(int tid);
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+    <title>Day Price</title>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:insert="~{components/navbar :: navbar}"></div>
+
+<div class="container">
+    <h4>ENOUGH IS ENOUGH</h4>
+
+    <div th:if="${flag}" class="alert alert-success test-center">
+        [[${flag}]]
+    </div>
+</div>
+</body>
+<!-- Footer -->
+<div th:insert="~{components/footer :: footer}"></div>
+</html>

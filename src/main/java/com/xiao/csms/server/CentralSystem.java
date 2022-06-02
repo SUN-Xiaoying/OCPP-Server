@@ -112,13 +112,10 @@ public class CentralSystem {
             @Override
             public MeterValuesConfirmation handleMeterValuesRequest(
                     UUID sessionIndex, MeterValuesRequest request) {
-                if(debug){
-                    logger.info(String.valueOf(request));
-                }
+
                 MeterValue[] meterValues = request.getMeterValue();
                 if(meterValues.length > 0){
                     SampledValue[] sampledValues = meterValues[0].getSampledValue();
-//                    logger.info("SampledValue " + Arrays.toString(sampledValues));
                     sampleService.create(request);
                 }
 

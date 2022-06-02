@@ -23,4 +23,10 @@ public class SampleController {
         return "server/sample";
     }
 
+    @GetMapping("/sample/test/{transactionId}")
+    public String testSample(@PathVariable("transactionId")int tid, Model m){
+        boolean flag = service.isEnough(tid);
+        m.addAttribute("flag",flag);
+        return "test";
+    }
 }

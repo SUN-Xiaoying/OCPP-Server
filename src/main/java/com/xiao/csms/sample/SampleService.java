@@ -7,6 +7,7 @@ import eu.chargetime.ocpp.model.core.SampledValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -16,7 +17,8 @@ public class SampleService {
     // INPUT SampledValues
     public void create(MeterValuesRequest r){
         MeterValue[] meterValues = r.getMeterValue();
-        if(meterValues.length > 0){
+        int maxSoC = repo.getMaxSampleSoC(r.getTransactionId());
+        if(maxSoC!= 100 && meterValues.length > 0){
             SampledValue[] sampledValues = meterValues[0].getSampledValue();
             if(sampledValues.length == 6){
                 Sample sample = new Sample();
@@ -36,6 +38,7 @@ public class SampleService {
     public List<Sample> getByTid(int tid){
         return repo.findByTid(tid);
     }
+
     public int getThirdPower(int tid){
         List<Sample> samples = getByTid(tid);
         return samples.get(2).getPower();
@@ -89,7 +92,6 @@ public class SampleService {
     // Unit kWh
     public double estimateEnergy(int targetSoC, int tid){
         double capacity = estimateCapacity(tid);
-        System.out.println("Capcity: " + capacity);
         int startSoC = repo.getStartSoC(tid);
         return capacity*(targetSoC-startSoC)/100.0;
     }
