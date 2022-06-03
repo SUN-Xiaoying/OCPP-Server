@@ -1,6 +1,7 @@
 package com.xiao.csms.sample;
 
 import com.xiao.csms.exceptions.ResourceNotFoundException;
+import com.xiao.csms.transaction.TransactionService;
 import eu.chargetime.ocpp.model.core.MeterValue;
 import eu.chargetime.ocpp.model.core.MeterValuesRequest;
 import eu.chargetime.ocpp.model.core.SampledValue;
@@ -14,15 +15,18 @@ import java.util.List;
 public class SampleService {
     @Autowired private SampleRepo repo;
 
+    public boolean ifContinue(int tid){
+        if(repo.ifExist(tid)){
+            if(repo.getMaxSampleSoC(tid) == 100){
+                return false;
+            }
+        }
+        return true;
+    }
+
     // INPUT SampledValues
     public void create(MeterValuesRequest r){
         MeterValue[] meterValues = r.getMeterValue();
-        int tid = r.getTransactionId();
-        if(repo.ifExist(tid)){
-            if(repo.getMaxSampleSoC(tid) == 100){
-                return;
-            }
-        }
 
         if(meterValues.length > 0){
             SampledValue[] sampledValues = meterValues[0].getSampledValue();

@@ -112,12 +112,17 @@ public class CentralSystem {
             @Override
             public MeterValuesConfirmation handleMeterValuesRequest(
                     UUID sessionIndex, MeterValuesRequest request) {
-                MeterValue[] meterValues = request.getMeterValue();
-                if(meterValues.length > 0){
-                    SampledValue[] sampledValues = meterValues[0].getSampledValue();
-                    sampleService.create(request);
-                }
 
+                int tid = request.getTransactionId();
+                if(sampleService.ifContinue(tid)){
+                    MeterValue[] meterValues = request.getMeterValue();
+                    if(meterValues.length > 0){
+                        SampledValue[] sampledValues = meterValues[0].getSampledValue();
+                        sampleService.create(request);
+                    }
+                }else{
+                    transactionService.setStopTime(tid, ZonedDateTime.now().toString());
+                }
                 return new MeterValuesConfirmation();
             }
 
@@ -164,7 +169,7 @@ public class CentralSystem {
                 if(debug){
                     logger.info(String.valueOf(request));
                 }
-                transactionService.stop(request);
+                transactionService.saveStopRequest(request);
 
                 return new StopTransactionConfirmation();
             }

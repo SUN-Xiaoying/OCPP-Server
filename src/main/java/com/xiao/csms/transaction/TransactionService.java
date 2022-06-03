@@ -52,10 +52,17 @@ public class TransactionService {
         return repo.getById(repo.getMaxId()).getConnectorId();
     }
     // SAVE StopRequest
-    public void stop(StopTransactionRequest r){
+    public void saveStopRequest(StopTransactionRequest r){
         repo.getByTransactionId(r.getTransactionId()).map(target -> {
-//            target.setMeterStop(Long.valueOf(r.getMeterStop()));
             target.setStopTime(String.valueOf(r.getTimestamp()));
+            repo.save(target);
+            return target;
+        });
+    }
+
+    public void setStopTime(int tid, String stopTime){
+        repo.getByTransactionId(tid).map(target -> {
+            target.setStopTime(stopTime);
             repo.save(target);
             return target;
         });
