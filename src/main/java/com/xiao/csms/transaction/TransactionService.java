@@ -18,6 +18,9 @@ public class TransactionService {
     // GET all transactions
     public List<Transaction> getAll(){ return repo.findAll();};
 
+    public boolean ifExists(int tid){
+        return repo.ifExists(tid);
+    }
     // GET transaction by transactionId
     public Transaction getByTid(int tid){
         Optional<Transaction> result = repo.getByTransactionId(tid);

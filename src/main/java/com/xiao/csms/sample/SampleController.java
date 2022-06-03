@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Controller
 public class SampleController {
     @Autowired SampleService service;
-
     @GetMapping("/sample/{transactionId}")
     public String showSample(@PathVariable("transactionId") int tid, Model m){
         List<Sample> samples = service.getByTid(tid);
@@ -23,10 +23,10 @@ public class SampleController {
         return "server/sample";
     }
 
-    @GetMapping("/sample/test/{transactionId}")
-    public String testSample(@PathVariable("transactionId")int tid, Model m){
-        boolean flag = service.isEnough(tid);
-        m.addAttribute("flag",flag);
-        return "test";
+    @GetMapping("/sample/delete/{transactionId}")
+    public String deleteSamples(@PathVariable("transactionId") int tid, RedirectAttributes ra){
+        service.deleteByTid(tid);
+        ra.addFlashAttribute("message", "Transaction "+tid+" has been deleted" );
+        return "redirect:/transactions";
     }
 }

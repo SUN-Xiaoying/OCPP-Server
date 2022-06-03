@@ -7,21 +7,34 @@
 body {
     width: 100%;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
 h4{
     text-align: center;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .main-container{
     min-height: calc(100vh - 136px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media screen and (min-width:850px) {
+    .main-container {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: "image-box text-box";
+    }
 }
 
 footer{
     height: 80px;
     text-align: center;
     line-height: 80px;
-    padding-top: 40%;
 }

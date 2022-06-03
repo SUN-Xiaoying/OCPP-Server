@@ -17,8 +17,14 @@ public class SampleService {
     // INPUT SampledValues
     public void create(MeterValuesRequest r){
         MeterValue[] meterValues = r.getMeterValue();
-        int maxSoC = repo.getMaxSampleSoC(r.getTransactionId());
-        if(maxSoC!= 100 && meterValues.length > 0){
+        int tid = r.getTransactionId();
+        if(repo.ifExist(tid)){
+            if(repo.getMaxSampleSoC(tid) == 100){
+                return;
+            }
+        }
+
+        if(meterValues.length > 0){
             SampledValue[] sampledValues = meterValues[0].getSampledValue();
             if(sampledValues.length == 6){
                 Sample sample = new Sample();
