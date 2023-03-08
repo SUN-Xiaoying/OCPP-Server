@@ -1,33 +1,54 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
+### JetBrains IDEs:
 .idea
-*.iws
 *.iml
 *.ipr
+*.iws
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
+### Eclipse IDE:
+.settings/
+.classpath
+.project
+apitests/.settings/
+apitests/.classpath
+apitests/.project
+
+### Gradle
+build
+.gradle
+
+# Gradle GUI config
+gradle-app.setting
+
+### JIRA plugin
+atlassian-ide-plugin.xml
+
+### Mac OSX:
+.DS_Store
+
+### Generated binaries
+bin/
+apitests/bin/
+
+### Others:
+target
+out
+logs
+*~
+classes
+mem.h2.db
+mem.trace.db
+checkout.log.json
+checkout.access.log.json
+.vagrant
+coverage/
+out
+/src/test/resources/dev/
+/src/main/resources/dev/
+/src/main/resources/rebel.xml
+
+### NetBeans IDE:
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
+/nbproject/*
+/docker/kred-getorder-mock/kred-getorders/.nb-gradle/
+/.nb-gradle-properties
+/private/

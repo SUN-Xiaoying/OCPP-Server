@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  ocpp-db:
+    container_name: ocpp-db
+    build: ./dependencies/postgres
+    image: ocpp-db
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
