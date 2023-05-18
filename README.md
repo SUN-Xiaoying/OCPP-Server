@@ -2,10 +2,12 @@
 
 ## Todo
 
--[ ] build postgres:ocpp in docker `docker compose up`
--[ ] Start service and dependencies `./gradlew startDependencies`
--[ ] Junit tests  `./gradlew test`
--[ ] Build docker image `./gradlew dockerBuild`
+Aha
+
+- [ ] build postgres:ocpp in docker `docker compose up`
+- [ ] Start service and dependencies `./gradlew startDependencies`
+- [ ] Junit tests  `./gradlew test`
+- [ ] Build docker image `./gradlew dockerBuild`
 
 ## Dependency
 
