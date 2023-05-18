@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Reservation</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
@@ -13,8 +14,8 @@
 <!-- Back Arrow -->
 <div th:insert="~{components/back :: back}"></div>
 
-<h4 th:if="${title}">[[${title}]]</h4>
-<div class="container mb-3">
+<div class="container main-container mb-3">
+    <h4 th:if="${title}">[[${title}]]</h4>
     <form class="bg-light"
           th:action="@{'/reservation/save/'+${transactionId}}" method="POST" th:object="${reservation}">
         <div class="form-group row">

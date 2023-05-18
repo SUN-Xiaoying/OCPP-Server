@@ -15,6 +15,7 @@ apitests/.project
 ### Gradle
 build
 .gradle
+gradle
 
 # Gradle GUI config
 gradle-app.setting
