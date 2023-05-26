@@ -13,11 +13,6 @@ repositories {
     }
 }
 
-java {
-    sourceCompatibility = '17'
-    targetCompatibility = '17'
-}
-
 dependencies {
 
     implementation "org.projectlombok:lombok:${lombokVersion}"
