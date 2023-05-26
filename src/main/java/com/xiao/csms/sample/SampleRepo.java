@@ -12,25 +12,25 @@ import java.util.List;
 public interface SampleRepo extends JpaRepository<Sample, Integer> {
 
     @Query("SELECT s FROM Sample s WHERE s.transactionId = ?1")
-    public List<Sample> findByTid(int tid);
+    List<Sample> findByTid(int tid);
 
     @Query("SELECT count(s)>0 FROM Sample s WHERE s.transactionId=?1")
-    public boolean ifExist(int tid);
+    boolean ifExist(int tid);
 
     @Query("SELECT MIN(s.soc) FROM Sample s WHERE s.transactionId=?1")
-    public int getStartSoC(int tid);
+    int getStartSoC(int tid);
 
     @Transactional
     @Modifying
     @Query("DELETE FROM Sample s WHERE s.transactionId = ?1")
-    public void deleteByTid(int tid);
+    void deleteByTid(int tid);
 
     @Transactional
     @Modifying
     @Query("DELETE FROM Sample s WHERE s.id>0")
-    public void cleanAll();
+    void cleanAll();
 
     @Query("SELECT MAX(s.soc) FROM Sample s WHERE s.transactionId=?1 ORDER BY s.id DESC ")
-    public int getMaxSampleSoC(int tid);
+    int getMaxSampleSoC(int tid);
 
 }

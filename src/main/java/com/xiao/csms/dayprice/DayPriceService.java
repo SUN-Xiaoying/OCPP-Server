@@ -20,7 +20,7 @@ import java.util.List;
 public class DayPriceService{
     private static final Logger logger = LoggerFactory.getLogger(DayPriceService.class);
 
-    @Autowired
+    @Autowired(required = false)
     private DayPriceRepo repo;
 
     private static final int MAX_HOUR = 24;

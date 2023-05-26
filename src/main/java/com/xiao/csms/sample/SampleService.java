@@ -1,14 +1,11 @@
 package com.xiao.csms.sample;
 
-import com.xiao.csms.exceptions.ResourceNotFoundException;
-import com.xiao.csms.transaction.TransactionService;
 import eu.chargetime.ocpp.model.core.MeterValue;
 import eu.chargetime.ocpp.model.core.MeterValuesRequest;
 import eu.chargetime.ocpp.model.core.SampledValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -17,9 +14,7 @@ public class SampleService {
 
     public boolean ifContinue(int tid){
         if(repo.ifExist(tid)){
-            if(repo.getMaxSampleSoC(tid) == 100){
-                return false;
-            }
+            return repo.getMaxSampleSoC(tid) != 100;
         }
         return true;
     }
@@ -31,14 +26,16 @@ public class SampleService {
         if(meterValues.length > 0){
             SampledValue[] sampledValues = meterValues[0].getSampledValue();
             if(sampledValues.length == 6){
-                Sample sample = new Sample();
-                sample.setTransactionId(r.getTransactionId());
-                sample.setSoc(Integer.parseInt(sampledValues[0].getValue()));
-                sample.setTemperature(Integer.parseInt(sampledValues[1].getValue()));
-                sample.setCurrent(Integer.parseInt(sampledValues[2].getValue()));
-                sample.setVoltage(Integer.parseInt(sampledValues[3].getValue()));
-                sample.setPower(Integer.parseInt(sampledValues[4].getValue()));
-                sample.setEnergy(Integer.parseInt(sampledValues[5].getValue()));
+                Sample sample = Sample.builder()
+                        .transactionId(r.getTransactionId())
+                        .soc(Integer.parseInt(sampledValues[0].getValue()))
+                        .temperature(Integer.parseInt(sampledValues[1].getValue()))
+                        .current(Integer.parseInt(sampledValues[2].getValue()))
+                        .voltage(Integer.parseInt(sampledValues[3].getValue()))
+                        .power(Integer.parseInt(sampledValues[4].getValue()))
+                        .energy(Integer.parseInt(sampledValues[5].getValue()))
+                        .build();
+
                 repo.save(sample);
             }
         }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.text.DecimalFormat;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -26,8 +25,6 @@ public class ReservationController {
     @Autowired SampleService sampleService;
     @Autowired DayPriceService dayPriceService;
 
-
-    private boolean debug = true;
     @GetMapping("/reservations")
     public String showReservations(Model m){
         List<Reservation> reservations = service.getAll();

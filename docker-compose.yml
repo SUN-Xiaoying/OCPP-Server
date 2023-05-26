@@ -1,11 +1,22 @@
 version: '3'
 
 services:
+  ocpp:
+    image: 'ocpp:latest'
+    build:
+      context: csms
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL = jdbc:postgresql://db:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=username
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
-  ocpp-db:
-    container_name: ocpp-db
+  db:
+    container_name: db
     build: ./dependencies/postgres
-    image: ocpp-db
+    image: db
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     expose:

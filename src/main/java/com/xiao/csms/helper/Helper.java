@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Helper {
-    private static DecimalFormat df = new DecimalFormat("0.000");
+    private static final DecimalFormat df = new DecimalFormat("0.000");
     // Generate random five five digits
     public static int randomFiveDigits(){
         return 10000 + (int)(Math.random()*10000);

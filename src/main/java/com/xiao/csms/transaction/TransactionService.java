@@ -16,7 +16,7 @@ public class TransactionService {
     @Autowired private SampleService sampleService;
 
     // GET all transactions
-    public List<Transaction> getAll(){ return repo.findAll();};
+    public List<Transaction> getAll(){ return repo.findAll();}
 
     public boolean ifExists(int tid){
         return repo.ifExists(tid);

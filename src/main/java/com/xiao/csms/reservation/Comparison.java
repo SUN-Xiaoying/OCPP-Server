@@ -14,7 +14,7 @@ public class Comparison {
     String actualTime;
     String estimatedTime;
     String ape;
-    private static DecimalFormat df = new DecimalFormat("0.000");
+    private static final DecimalFormat df = new DecimalFormat("0.000");
 
     public int getReservationId() {
         return reservationId;

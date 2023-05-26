@@ -1,12 +1,12 @@
 package com.xiao.csms.sample;
 
-import eu.chargetime.ocpp.model.core.Location;
 import eu.chargetime.ocpp.utilities.MoreObjects;
+import lombok.Builder;
 
 import javax.persistence.*;
-import java.util.Arrays;
 
 @Entity
+@Builder
 public class Sample {
     @Id
     @Column(name = "id", nullable = false)

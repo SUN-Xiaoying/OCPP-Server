@@ -1,17 +1,16 @@
 package com.xiao.csms.connector;
 
 import com.xiao.csms.exceptions.ResourceNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 public class ConnectorService {
-    @Autowired private ConnectorRepo repo;
+    @Autowired(required=false)
+    private ConnectorRepo repo;
 
     // GET all connectors
     public List<Connector> getAll(){return repo.findAll();}

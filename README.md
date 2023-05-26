@@ -1,10 +1,14 @@
 # OCPP Server
 
+> That's truly desperate to see my own tech debt.
+> 1. DB redesign needed. Take `Reservation` for example, there are **3** ids in one table, where one Id could relate to the others. It's ok for a small project, but when it coming to a bigger scale, the memory cost would be **ridiculous**.
+> 2. FP reformat needed. Xiao, you didn't even use `@Builder` in the whole project, how could you graduate?
+> 3. SQL script needed. 
+> 4. Docker! Docker! Docker! I'm telling you No one could run this project locally.
+
 ## Todo
 
-Aha
-
-- [ ] build postgres:ocpp in docker `docker compose up`
+- [X] build postgres:ocpp in docker `docker compose up`
 - [ ] Start service and dependencies `./gradlew startDependencies`
 - [ ] Junit tests  `./gradlew test`
 - [ ] Build docker image `./gradlew dockerBuild`

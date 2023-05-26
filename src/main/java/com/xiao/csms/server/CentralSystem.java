@@ -38,7 +38,7 @@ import java.util.UUID;
 public class CentralSystem {
     private static final Logger logger = LoggerFactory.getLogger(CentralSystem.class);
 
-    private IServerAPI server;
+    private final IServerAPI server;
 
     @Autowired private ConnectorService connectorService;
     @Autowired private TransactionService transactionService;
@@ -50,7 +50,7 @@ public class CentralSystem {
 
     private boolean isStarted;
 
-    private boolean debug=false;
+    private final boolean debug=false;
 
     public ServerCoreEventHandler createServerCoreEventHandler() {
 
